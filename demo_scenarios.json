@@ -1,0 +1,67 @@
+[
+  {
+    "id": "BREACH_RESPONSE",
+    "name": "Data Breach Response Scenario",
+    "description": "Suspected data breach requiring immediate assessment and response",
+    "urgency": "CRITICAL",
+    "timeline": "24 hours",
+    "key_questions": [
+      "What controls failed?",
+      "What is our exposure?",
+      "What are notification requirements?",
+      "How do we prevent recurrence?"
+    ]
+  },
+  {
+    "id": "AUDIT_PREP",
+    "name": "Regulatory Audit Preparation",
+    "description": "Upcoming APRA audit requiring compliance validation",
+    "urgency": "HIGH",
+    "timeline": "2 weeks",
+    "key_questions": [
+      "Are we compliant with CPS 234?",
+      "What gaps exist?",
+      "What evidence do we need?",
+      "What's our remediation timeline?"
+    ]
+  },
+  {
+    "id": "M&A_DUE_DILIGENCE",
+    "name": "Merger & Acquisition Due Diligence",
+    "description": "Security assessment for potential acquisition target",
+    "urgency": "MEDIUM",
+    "timeline": "30 days",
+    "key_questions": [
+      "What's their security posture?",
+      "What risks are we inheriting?",
+      "Integration challenges?",
+      "Compliance gaps?"
+    ]
+  },
+  {
+    "id": "BOARD_REPORTING",
+    "name": "Board Risk Reporting",
+    "description": "Quarterly security posture report for board meeting",
+    "urgency": "MEDIUM",
+    "timeline": "1 week",
+    "key_questions": [
+      "Current risk level?",
+      "Improvement trends?",
+      "Peer comparison?",
+      "Investment priorities?"
+    ]
+  },
+  {
+    "id": "INCIDENT_POSTMORTEM",
+    "name": "Ransomware Attack Post-Mortem",
+    "description": "Analysis after ransomware incident to improve defenses",
+    "urgency": "HIGH",
+    "timeline": "3 days",
+    "key_questions": [
+      "How did they get in?",
+      "What controls would have prevented this?",
+      "Recovery time objective met?",
+      "Lessons learned?"
+    ]
+  }
+]

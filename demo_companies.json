@@ -1,0 +1,263 @@
+[
+  {
+    "name": "MediCare Plus Hospital",
+    "industry": "Healthcare",
+    "size": "Large",
+    "employee_count": 2500,
+    "location": "Sydney, NSW",
+    "frameworks": [
+      "Essential8",
+      "HIPAA",
+      "Privacy Act 1988"
+    ],
+    "current_controls": [
+      "E8_7",
+      "E8_8",
+      "HIPAA_A1",
+      "APP11"
+    ],
+    "risk_profile": "HIGH",
+    "description": "Major metropolitan hospital handling sensitive patient data",
+    "challenges": [
+      "Legacy systems",
+      "24/7 operations",
+      "Complex supply chain"
+    ],
+    "annual_revenue": "$450M",
+    "it_budget": "$22M"
+  },
+  {
+    "name": "HealthTech Innovations",
+    "industry": "Healthcare Technology",
+    "size": "Medium",
+    "employee_count": 350,
+    "location": "Melbourne, VIC",
+    "frameworks": [
+      "Essential8",
+      "HIPAA",
+      "ISO 27001:2022"
+    ],
+    "current_controls": [
+      "E8_7",
+      "E8_2",
+      "ISO_8.5"
+    ],
+    "risk_profile": "MEDIUM",
+    "description": "Digital health platform provider",
+    "challenges": [
+      "Rapid growth",
+      "Multi-cloud architecture",
+      "API security"
+    ],
+    "annual_revenue": "$45M",
+    "it_budget": "$4.5M"
+  },
+  {
+    "name": "SecureBank Australia",
+    "industry": "Banking",
+    "size": "Large",
+    "employee_count": 8000,
+    "location": "Sydney, NSW",
+    "frameworks": [
+      "Essential8",
+      "APRA CPS 234",
+      "PCI DSS"
+    ],
+    "current_controls": [
+      "E8_7",
+      "E8_5",
+      "E8_8",
+      "CPS234_12",
+      "PCI_8"
+    ],
+    "risk_profile": "CRITICAL",
+    "description": "Regional bank with digital transformation initiative",
+    "challenges": [
+      "Legacy core banking",
+      "Open banking compliance",
+      "Fraud prevention"
+    ],
+    "annual_revenue": "$2.1B",
+    "it_budget": "$180M"
+  },
+  {
+    "name": "PayFlow Solutions",
+    "industry": "Payment Processing",
+    "size": "Medium",
+    "employee_count": 450,
+    "location": "Brisbane, QLD",
+    "frameworks": [
+      "PCI DSS",
+      "Essential8",
+      "ISO 27001:2022"
+    ],
+    "current_controls": [
+      "PCI_3",
+      "PCI_4",
+      "E8_7"
+    ],
+    "risk_profile": "HIGH",
+    "description": "Payment gateway and merchant services provider",
+    "challenges": [
+      "PCI compliance",
+      "Real-time processing",
+      "Fraud detection"
+    ],
+    "annual_revenue": "$120M",
+    "it_budget": "$15M"
+  },
+  {
+    "name": "PowerGrid NSW",
+    "industry": "Energy",
+    "size": "Large",
+    "employee_count": 3500,
+    "location": "Newcastle, NSW",
+    "frameworks": [
+      "SOCI Act",
+      "Essential8",
+      "ISO 27001:2022"
+    ],
+    "current_controls": [
+      "SOCI_RMP",
+      "E8_1",
+      "E8_8",
+      "ISO_7.1"
+    ],
+    "risk_profile": "CRITICAL",
+    "description": "State electricity distribution network operator",
+    "challenges": [
+      "OT/IT convergence",
+      "Nation-state threats",
+      "Physical security"
+    ],
+    "annual_revenue": "$3.5B",
+    "it_budget": "$140M"
+  },
+  {
+    "name": "AquaFlow Water Services",
+    "industry": "Water Utilities",
+    "size": "Medium",
+    "employee_count": 850,
+    "location": "Perth, WA",
+    "frameworks": [
+      "SOCI Act",
+      "Essential8"
+    ],
+    "current_controls": [
+      "SOCI_ACCESS",
+      "E8_5"
+    ],
+    "risk_profile": "HIGH",
+    "description": "Regional water treatment and distribution",
+    "challenges": [
+      "SCADA security",
+      "Remote facilities",
+      "Supply chain risks"
+    ],
+    "annual_revenue": "$280M",
+    "it_budget": "$18M"
+  },
+  {
+    "name": "OzMart Retail Group",
+    "industry": "Retail",
+    "size": "Large",
+    "employee_count": 5000,
+    "location": "Melbourne, VIC",
+    "frameworks": [
+      "PCI DSS",
+      "Privacy Act 1988",
+      "Essential8"
+    ],
+    "current_controls": [
+      "PCI_1",
+      "APP6",
+      "E8_7"
+    ],
+    "risk_profile": "MEDIUM",
+    "description": "National retail chain with e-commerce platform",
+    "challenges": [
+      "Omnichannel security",
+      "Customer data protection",
+      "Supply chain"
+    ],
+    "annual_revenue": "$850M",
+    "it_budget": "$42M"
+  },
+  {
+    "name": "Department of Digital Services",
+    "industry": "Government",
+    "size": "Large",
+    "employee_count": 1200,
+    "location": "Canberra, ACT",
+    "frameworks": [
+      "Essential8",
+      "Privacy Act 1988",
+      "ISO 27001:2022"
+    ],
+    "current_controls": [
+      "E8_1",
+      "E8_7",
+      "E8_5",
+      "E8_8",
+      "APP11"
+    ],
+    "risk_profile": "HIGH",
+    "description": "Federal government digital transformation agency",
+    "challenges": [
+      "Legacy systems",
+      "Citizen data protection",
+      "Service availability"
+    ],
+    "annual_revenue": "N/A",
+    "it_budget": "$95M"
+  },
+  {
+    "name": "CloudNative Solutions",
+    "industry": "Technology",
+    "size": "Small",
+    "employee_count": 120,
+    "location": "Sydney, NSW",
+    "frameworks": [
+      "ISO 27001:2022",
+      "Essential8"
+    ],
+    "current_controls": [
+      "ISO_8.28",
+      "E8_2",
+      "E8_7"
+    ],
+    "risk_profile": "MEDIUM",
+    "description": "SaaS platform for enterprise automation",
+    "challenges": [
+      "Multi-tenant security",
+      "API security",
+      "DevSecOps"
+    ],
+    "annual_revenue": "$18M",
+    "it_budget": "$3M"
+  },
+  {
+    "name": "Metro University Sydney",
+    "industry": "Education",
+    "size": "Large",
+    "employee_count": 3000,
+    "location": "Sydney, NSW",
+    "frameworks": [
+      "Essential8",
+      "Privacy Act 1988"
+    ],
+    "current_controls": [
+      "E8_7",
+      "APP5"
+    ],
+    "risk_profile": "MEDIUM",
+    "description": "Major university with 45,000 students",
+    "challenges": [
+      "BYOD security",
+      "Research data protection",
+      "Student privacy"
+    ],
+    "annual_revenue": "$680M",
+    "it_budget": "$34M"
+  }
+]
