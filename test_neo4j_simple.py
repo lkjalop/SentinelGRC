@@ -21,17 +21,16 @@ def check_neo4j_connection():
     try:
         from neo4j import GraphDatabase
         
-        # Your Neo4j connection details
-        uri = "bolt://localhost:7687"
-        username = "neo4j"  
-        password = "Ag3nt-GRC"  # From your neo4j-setup-simple.py
+        # Use secure configuration instead of hardcoded credentials
+        from secure_neo4j_config import get_secure_neo4j_config
+        config = get_secure_neo4j_config()
         
-        print(f"Connecting to: {uri}")
-        print(f"Username: {username}")
+        print(f"Connecting to: {config.uri}")
+        print(f"Username: {config.username}")
         print("Password: [PROTECTED]")
         
         # Try to connect
-        driver = GraphDatabase.driver(uri, auth=(username, password))
+        driver = GraphDatabase.driver(config.uri, auth=(config.username, config.password))
         driver.verify_connectivity()
         
         print("SUCCESS: Neo4j connection established")

@@ -1,23 +1,38 @@
-# 🛡️ Sentinel GRC - Australian Compliance Assessment Platform
+# 🌍 SentinelGRC - Unified Multi-Regional Compliance Platform
 
-**Comprehensive GRC assessment system implementing Essential 8, Privacy Act, APRA CPS 234, and SOCI Act compliance frameworks with AI-enhanced analysis.**
+**Enterprise-grade compliance assessment platform supporting Australian, US, and EU regulatory frameworks with intelligent geographic routing and AI-enhanced analysis.**
 
-## 🌟 Features
+[![Demo Status](https://img.shields.io/badge/Demo-Live-brightgreen)](https://sentinelgrc-demo.streamlit.app) 
+[![Security](https://img.shields.io/badge/Security-Hardened-blue)](#security-features)
+[![Regions](https://img.shields.io/badge/Regions-AU%20|%20US%20|%20EU-orange)](#supported-regions)
 
-### Core Compliance Frameworks (72 Controls Total)
-- **Essential 8** - Australian Government cybersecurity framework (8 controls)
-- **Privacy Act 1988** - 13 Australian Privacy Principles (13 APPs)
-- **APRA CPS 234** - Information Security Standard for financial services (8 controls)
-- **SOCI Act** - Security of Critical Infrastructure Act (7 controls)
-- **HIPAA** - US Healthcare privacy and security (10 controls)
-- **PCI DSS** - Payment Card Industry Data Security Standard (12 controls)
-- **ISO 27001:2022** - International security standard (14 controls)
+> **🚨 Demo Version**: Uses sanitized data only. For production use, contact your compliance team.
 
-### Advanced Capabilities
-- 🤖 **AI-Enhanced Analysis** - Groq LLM integration for legal and threat modeling
-- 📊 **ML Confidence Scoring** - Machine learning-based assessment validation
-- 🔄 **Sidecar Architecture** - Background processing for enhanced analysis
-- 💾 **Data Persistence** - Supabase integration for assessment history
+## 🌟 Platform Capabilities
+
+### 🗺️ Multi-Regional Architecture
+**Unified platform with intelligent geographic routing:**
+- 🇦🇺 **Australia**: Essential 8, Privacy Act, APRA CPS 234, SOCI Act
+- 🇺🇸 **United States**: SOC 2, NIST CSF, HIPAA, CCPA/CPRA, PCI DSS  
+- 🇪🇺 **European Union**: GDPR, NIS2, DORA, ISO 27001
+- 🌐 **Global**: Cross-framework harmonization and gap analysis
+
+### 📊 Compliance Framework Coverage (72+ Controls)
+| Region | Primary Frameworks | Controls | Industry Focus |
+|--------|-------------------|----------|----------------|
+| 🇦🇺 AU | Essential 8, Privacy Act, APRA CPS 234, SOCI | 36 | Gov, Finance, Critical Infrastructure |
+| 🇺🇸 US | SOC 2, NIST CSF, HIPAA, CCPA | 45 | Tech, Healthcare, Finance |
+| 🇪🇺 EU | GDPR, NIS2, DORA, ISO 27001 | 40 | Digital Services, Finance |
+| 🌐 Global | ISO 27001, Common Controls | 25 | Multi-national Enterprises |
+
+### 🚀 Advanced Capabilities
+- 🌍 **Geographic Intelligence**: Auto-routing based on IP/region with framework adaptation
+- 🤖 **AI-Enhanced Analysis**: Groq LLM integration for contextual legal interpretation  
+- 📊 **ML Confidence Scoring**: Machine learning validation with human-in-the-loop escalation
+- 🔄 **Sidecar Architecture**: Background processing for real-time threat intelligence
+- 💾 **Secure Data Management**: Environment-based configuration with zero hardcoded credentials
+- 🔗 **Knowledge Graph**: Neo4j-powered control relationships and cross-framework mapping
+- 🎯 **Industry Intelligence**: Smart framework selection based on company profile
 - 🗺️ **Neo4j Knowledge Graph** - 72 controls, 21 threats, 155+ relationships
 - 📈 **Analytics Dashboard** - Real-time metrics and trends
 - 🎯 **Human-in-the-Loop** - Intelligent escalation based on confidence thresholds
@@ -33,8 +48,12 @@
 python setup_sentinel_grc.py
 ```
 
-### 2. Launch the Application
+### 2. Launch the Unified Platform
 ```bash
+# New unified multi-regional platform
+streamlit run streamlit_app.py
+
+# Or legacy Australian-only version
 streamlit run streamlit_demo.py
 ```
 
@@ -64,6 +83,80 @@ cryptography>=41.0.0
 ### Optional Services
 - **Groq API** - Free tier: 14,400 requests/day
 - **Supabase** - Free tier: 500MB database, 50MB storage
+- **Neo4j** - Cloud (Aura) free tier: 1GB database, zero laptop dependency
+
+## 🏗️ Unified Multi-Regional Architecture
+
+### Strategic Decision: Unified Platform (Netflix Model)
+**Why we chose this over separate regional platforms:**
+
+| Aspect | **Unified Platform** ✅ | **Separate Platforms** ❌ |
+|--------|------------------------|---------------------------|
+| **Maintenance** | Single codebase | 3x development overhead |
+| **Learning Transfer** | AU insights improve US | Siloed knowledge |
+| **Professional Appeal** | Enterprise-grade appearance | Fragmented user experience |  
+| **Cost Efficiency** | One deployment | Multiple hosting costs |
+| **Market Expansion** | Easy region addition | Rebuild for each market |
+
+### Security Hardening Achievements (Production-Ready)
+✅ **Critical Vulnerabilities Fixed:**
+- **Credential Security**: Replaced hardcoded Neo4j passwords in 6+ files with secure environment variables
+- **Configuration Management**: Implemented `secure_neo4j_config.py` with production/dev fallbacks
+- **Thread Safety**: Thread-safe caching with automatic cleanup prevention
+- **Cryptographic Security**: SHA-256 hashing throughout (replaced insecure MD5)
+- **Error Handling**: Comprehensive exception handling on all async operations
+- **Memory Management**: Bounded collections prevent memory leaks
+
+✅ **Enterprise Security Features:**
+- Zero hardcoded credentials in production
+- Secure config templates for deployment (`.env.template`)
+- Input validation and sanitization across all user inputs
+- Thread-safe operations across all compliance agents
+- Audit logging for compliance decision tracking
+
+### International Demo Solution (US Colleagues)
+**Problem Solved**: Neo4j laptop dependency for US testing
+**Solution**: Neo4j Aura Cloud integration
+
+```bash
+# Zero laptop installation required
+NEO4J_URI=neo4j+s://your-instance.databases.neo4j.io
+NEO4J_USERNAME=neo4j  
+NEO4J_PASSWORD=your_aura_password
+
+# Always accessible, professional appearance
+# 10-minute setup, free tier sufficient for demos
+```
+
+### Data Sovereignty Considerations (Future Enterprise)
+**Strategic thinking for real-world deployment:**
+
+```
+🚨 ENTERPRISE DATA SOVEREIGNTY REQUIREMENTS
+┌─────────────────────────────────────────────────────────────────┐
+│                    FUTURE ARCHITECTURE                         │
+│                   (Documented for Scale)                       │
+└─────────────────────────────────────────────────────────────────┘
+
+🇦🇺 AUSTRALIA          🇺🇸 UNITED STATES         🇪🇺 EUROPEAN UNION
+┌─────────────┐        ┌─────────────┐        ┌─────────────┐
+│AU Data Center│        │US Data Center│        │EU Data Center│  
+│• Sydney      │        │• Virginia    │        │• Frankfurt   │
+│• Data never  │        │• State-specific│        │• GDPR Art 44-49│
+│  leaves AU   │        │  requirements  │        │• Data residency│
+└─────────────┘        └─────────────┘        └─────────────┘
+
+COMPLIANCE REQUIREMENTS:
+• Australian data → Australian servers (Data Protection Act)
+• EU data → EU servers (GDPR Article 44-49 transfers)
+• US data → State-specific rules (CCPA, VCDPA, etc.)
+• Multi-nationals → Complex data flow architecture
+• Cache TTL → 24h maximum for compliance data
+• Audit retention → 7 years minimum
+```
+
+**Current Approach**: Single cloud deployment with regional disclaimers
+**Future Scale**: Multi-region data centers with sovereignty compliance
 
 ## 🏗️ Architecture Overview & Trade-offs Analysis
 

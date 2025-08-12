@@ -13,10 +13,11 @@ from typing import Dict, Any, List, Optional, Tuple
 from dataclasses import dataclass
 from abc import ABC
 
-# Import from your existing sentinel-grc-complete.py
-from sentinel_grc_complete import (
+# Import from core types to avoid circular dependencies
+from core_types import (
     BaseComplianceAgent, CompanyProfile, Config,
-    ConfidenceLevel, EscalationType
+    ConfidenceLevel, EscalationType, AssessmentResult,
+    AssessmentStatus, RiskLevel, get_risk_level
 )
 
 # ============================================================================
@@ -32,7 +33,8 @@ class PrivacyActAgent(BaseComplianceAgent):
     def __init__(self):
         super().__init__(
             name="PrivacyActAgent",
-            expertise="Privacy Act 1988 and Australian Privacy Principles"
+            expertise="Privacy Act 1988 and Australian Privacy Principles",
+            framework="Privacy Act 1988"  # For shared knowledge graph
         )
         self.privacy_principles = self._initialize_privacy_principles()
     
@@ -177,13 +179,13 @@ class PrivacyActAgent(BaseComplianceAgent):
             }
         }
     
-    async def assess(self, company_profile: CompanyProfile) -> Dict[str, Any]:
+    async def assess(self, company_profile: CompanyProfile) -> AssessmentResult:
         """
-        Assess Privacy Act compliance for the company.
+        Assess Privacy Act compliance with enterprise-grade error handling.
         Evaluates implementation of Australian Privacy Principles.
         """
         
-        assessment = {
+        assessment_data = {
             "framework": "Privacy Act 1988",
             "company": company_profile.company_name,
             "timestamp": datetime.now(),
@@ -193,56 +195,157 @@ class PrivacyActAgent(BaseComplianceAgent):
             "privacy_risk_level": "UNKNOWN",
             "data_handling_assessment": {},
             "breach_risk_assessment": {},
-            "evidence": []
+            "evidence": [],
+            "errors": [],
+            "warnings": []
         }
         
-        # Assess each APP
-        total_score = 0
-        for app_id, principle in self.privacy_principles.items():
-            app_assessment = await self._assess_privacy_principle(
-                app_id, principle, company_profile
+        try:
+            # Assess each APP with individual error handling
+            total_score = 0
+            successful_apps = 0
+            
+            for app_id, principle in self.privacy_principles.items():
+                try:
+                    app_assessment = await self._assess_privacy_principle(
+                        app_id, principle, company_profile
+                    )
+                    
+                    assessment_data["apps_assessed"].append(app_assessment)
+                    total_score += app_assessment["compliance_score"]
+                    successful_apps += 1
+                    
+                except asyncio.TimeoutError:
+                    error_msg = f"Timeout assessing APP {app_id}"
+                    logger.error(error_msg)
+                    assessment_data["errors"].append(error_msg)
+                    assessment_data["apps_assessed"].append({
+                        "app_id": app_id,
+                        "status": "ERROR_TIMEOUT",
+                        "compliance_score": 0.0,
+                        "error": "Assessment timeout"
+                    })
+                    
+                except Exception as app_error:
+                    error_msg = f"Error assessing APP {app_id}: {str(app_error)}"
+                    logger.error(error_msg)
+                    assessment_data["errors"].append(error_msg)
+                    assessment_data["apps_assessed"].append({
+                        "app_id": app_id,
+                        "status": "ERROR",
+                        "compliance_score": 0.0,
+                        "error": str(app_error)
+                    })
+            
+            # Calculate final compliance score
+            if successful_apps > 0:
+                assessment_data["compliance_score"] = total_score / len(self.privacy_principles)
+            else:
+                assessment_data["compliance_score"] = 0.0
+                assessment_data["warnings"].append("No APPs assessed successfully")
+            
+            # Identify gaps from completed assessments
+            for app_data in assessment_data["apps_assessed"]:
+                if app_data.get("compliance_score", 0) < 0.7:
+                    assessment_data["gaps_identified"].append({
+                        "principle": app_data.get("app_id", "unknown"),
+                        "gap_description": app_data.get("gap_description", "Low compliance score"),
+                        "risk_level": "MEDIUM",
+                        "recommendations": app_data.get("recommendations", [])
+                    })
+        
+            # Assess privacy risk level with error handling
+            try:
+                assessment_data["privacy_risk_level"] = self._calculate_privacy_risk(
+                    company_profile, assessment_data["gaps_identified"]
+                )
+            except Exception as risk_error:
+                logger.error(f"Error calculating privacy risk: {risk_error}")
+                assessment_data["privacy_risk_level"] = "HIGH"  # Conservative default
+                assessment_data["errors"].append("Failed to calculate privacy risk")
+            
+            # Data handling assessment with error handling
+            try:
+                assessment_data["data_handling_assessment"] = await self._assess_data_handling(
+                    company_profile
+                )
+            except Exception as data_error:
+                logger.error(f"Error assessing data handling: {data_error}")
+                assessment_data["data_handling_assessment"] = {"status": "ERROR", "error": str(data_error)}
+                assessment_data["errors"].append("Failed to assess data handling")
+            
+            # Breach risk assessment with error handling
+            try:
+                assessment_data["breach_risk_assessment"] = self._assess_breach_risk(
+                    company_profile, assessment_data["gaps_identified"]
+                )
+            except Exception as breach_error:
+                logger.error(f"Error assessing breach risk: {breach_error}")
+                assessment_data["breach_risk_assessment"] = {"risk_level": "HIGH", "error": str(breach_error)}
+                assessment_data["errors"].append("Failed to assess breach risk")
+            
+            # Generate recommendations with error handling
+            try:
+                recommendations = await self._generate_privacy_recommendations(
+                    assessment_data["gaps_identified"], company_profile
+                )
+            except Exception as rec_error:
+                logger.error(f"Error generating recommendations: {rec_error}")
+                recommendations = []
+                assessment_data["errors"].append("Failed to generate recommendations")
+            
+            # Calculate confidence with error handling
+            try:
+                confidence = self.calculate_confidence(assessment_data)
+            except Exception as conf_error:
+                logger.error(f"Error calculating confidence: {conf_error}")
+                confidence = 0.3  # Low confidence due to errors
+                assessment_data["errors"].append("Failed to calculate confidence")
+            
+            # Adjust confidence based on errors
+            if assessment_data["errors"]:
+                confidence = max(0.1, confidence * 0.5)
+            
+            # Create standardized assessment result
+            return AssessmentResult(
+                framework="Privacy Act 1988",
+                company=company_profile.company_name,
+                timestamp=datetime.now(),
+                status=AssessmentStatus.COMPLETED if not assessment_data["errors"] else AssessmentStatus.FAILED,
+                confidence=confidence,
+                risk_level=get_risk_level(assessment_data["compliance_score"]),
+                controls_assessed=assessment_data["apps_assessed"],
+                gaps_identified=assessment_data["gaps_identified"],
+                recommendations=recommendations,
+                evidence=assessment_data.get("evidence", []),
+                overall_score=assessment_data["compliance_score"],
+                control_scores={app["app_id"]: app.get("compliance_score", 0.0) 
+                              for app in assessment_data["apps_assessed"] if "app_id" in app},
+                maturity_scores={},  # Not applicable for Privacy Act
+                executive_summary=f"Privacy Act assessment completed with {len(assessment_data['gaps_identified'])} gaps identified",
+                business_impact=f"Privacy risk level: {assessment_data['privacy_risk_level']}"
             )
             
-            assessment["apps_assessed"].append(app_assessment)
-            total_score += app_assessment["compliance_score"]
-            
-            # Identify gaps
-            if app_assessment["compliance_score"] < 0.7:
-                assessment["gaps_identified"].append({
-                    "principle": app_id,
-                    "name": principle["name"],
-                    "gap_description": app_assessment["gap_description"],
-                    "risk_level": principle["risk_level"],
-                    "recommendations": app_assessment["recommendations"]
-                })
-        
-        # Calculate overall compliance score
-        assessment["compliance_score"] = total_score / len(self.privacy_principles)
-        
-        # Assess privacy risk level
-        assessment["privacy_risk_level"] = self._calculate_privacy_risk(
-            company_profile, assessment["gaps_identified"]
-        )
-        
-        # Data handling assessment
-        assessment["data_handling_assessment"] = await self._assess_data_handling(
-            company_profile
-        )
-        
-        # Breach risk assessment
-        assessment["breach_risk_assessment"] = self._assess_breach_risk(
-            company_profile, assessment["gaps_identified"]
-        )
-        
-        # Generate recommendations
-        assessment["recommendations"] = await self._generate_privacy_recommendations(
-            assessment["gaps_identified"], company_profile
-        )
-        
-        # Calculate confidence
-        assessment["confidence"] = self.calculate_confidence(assessment)
-        
-        return assessment
+        except Exception as critical_error:
+            # Critical failure - return minimal safe assessment
+            logger.critical(f"Critical error in PrivacyActAgent assessment: {critical_error}")
+            return AssessmentResult(
+                framework="Privacy Act 1988",
+                company=company_profile.company_name,
+                timestamp=datetime.now(),
+                status=AssessmentStatus.FAILED,
+                confidence=0.0,
+                risk_level=RiskLevel.CRITICAL,
+                controls_assessed=[],
+                gaps_identified=[],
+                recommendations=[],
+                evidence=[],
+                overall_score=0.0,
+                control_scores={},
+                maturity_scores={},
+                executive_summary="Critical assessment failure requires human review",
+                business_impact="Unable to determine privacy compliance status"
+            )
     
     async def _assess_privacy_principle(self, app_id: str, principle: Dict, 
                                       company_profile: CompanyProfile) -> Dict[str, Any]:
@@ -1043,3 +1146,17 @@ if __name__ == "__main__":
     
     # Run tests
     asyncio.run(test_agents())
+
+
+# Export function for main application integration
+def load_australian_agents():
+    """
+    Load and return Australian compliance agents for use in main application.
+    This function is called by the unified platform.
+    """
+    return {
+        'privacy_act': PrivacyActAgent(),
+        'apra_cps234': APRACPSAgent(),
+        'soci_act': SOCIActAgent(),
+        'essential8': None,  # Would need to import from main system
+    }

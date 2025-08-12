@@ -19,7 +19,15 @@ class Neo4jKnowledgeGraph:
     Replaces the in-memory NetworkX graph with persistent storage.
     """
     
-    def __init__(self, uri="bolt://localhost:7687", user="neo4j", password="password"):
+    def __init__(self, uri=None, user=None, password=None):
+        # Use secure configuration if parameters not provided
+        if not all([uri, user, password]):
+            from secure_neo4j_config import get_secure_neo4j_config
+            config = get_secure_neo4j_config()
+            uri = uri or config.uri
+            user = user or config.username
+            password = password or config.password
+            
         self.driver = GraphDatabase.driver(uri, auth=(user, password))
         
     def close(self):
@@ -359,12 +367,8 @@ def setup_neo4j_locally():
     print("Setting up Neo4j Community Edition for Sentinel GRC...")
     
     try:
-        # Test connection
-        graph = Neo4jKnowledgeGraph(
-            uri="bolt://localhost:7687",
-            user="neo4j", 
-            password="your_password_here"  # Change this!
-        )
+        # Test connection using secure configuration
+        graph = Neo4jKnowledgeGraph()  # Uses secure config manager
         
         # Initialize knowledge
         graph.initialize_essential8_knowledge()

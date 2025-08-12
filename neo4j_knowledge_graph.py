@@ -20,10 +20,13 @@ class ComplianceKnowledgeGraph:
     """
     
     def __init__(self):
-        # Connect to your local Neo4j
-        self.uri = "neo4j://localhost:7687"
-        self.username = "neo4j"
-        self.password = "Ag3nt-GRC"  # The password you set
+        # Use secure configuration instead of hardcoded credentials
+        from secure_neo4j_config import get_secure_neo4j_config
+        config = get_secure_neo4j_config()
+        
+        self.uri = config.uri
+        self.username = config.username
+        self.password = config.password
         
         # Create driver connection
         self.driver = GraphDatabase.driver(

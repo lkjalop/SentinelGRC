@@ -145,6 +145,14 @@ import numpy as np
 import networkx as nx
 from collections import defaultdict
 
+# Import core types to avoid circular dependencies
+from core_types import (
+    Config, ConfidenceLevel, EscalationType, AssessmentStatus, RiskLevel,
+    CompanyProfile, AssessmentResult, BaseComplianceAgent,
+    get_risk_level, get_confidence_level, determine_escalation
+)
+from cache_manager import get_cache_manager
+
 # Configure logging for production monitoring
 logging.basicConfig(
     level=logging.INFO,
@@ -156,105 +164,43 @@ logger = logging.getLogger(__name__)
 # CONFIGURATION AND CONSTANTS
 # ============================================================================
 
-class Config:
-    """
-    Production configuration with AEGIS-inspired thresholds.
-    These values come from real manufacturing AI deployment experience.
-    """
-    
-    # Confidence thresholds learned from AEGIS deployment
-    MIN_CONFIDENCE_FOR_AUTO_APPROVAL = 0.85  # Like AEGIS at 95% accuracy
-    MIN_CONFIDENCE_FOR_RECOMMENDATION = 0.70  # Like AEGIS at startup
-    ALWAYS_ESCALATE_THRESHOLD = 0.60  # Below this, always get human help
-    
-    # Risk thresholds for human escalation
-    HIGH_RISK_FINANCIAL_THRESHOLD = 50000  # Dollar impact requiring executive review
-    HIGH_RISK_EMPLOYEE_THRESHOLD = 500  # Company size requiring extra scrutiny
-    
-    # System behavior (from AEGIS operational experience)
-    MAX_AGENT_RETRIES = 3
-    AGENT_TIMEOUT_SECONDS = 30
-    CACHE_TTL_SECONDS = 3600
-    PARALLEL_AGENT_LIMIT = 5
-    
-    # Legal and ethical boundaries
-    LEGAL_DISCLAIMER = """
-    This assessment is provided by an AI system for informational purposes only.
-    It does not constitute professional compliance advice. Please consult with
-    qualified compliance professionals for official assessments and legal guidance.
-    """
-    
-    # Industries requiring special care (learned from real deployments)
-    HIGH_RISK_INDUSTRIES = ["Healthcare", "Finance", "Government", "Defense"]
-    
-    # Compliance frameworks available
-    AVAILABLE_FRAMEWORKS = ["Essential8", "ISO27001", "PrivacyAct", "NIST"]
+# Config class now imported from core_types
 
 # ============================================================================
 # CORE DATA MODELS
 # ============================================================================
 
-class ConfidenceLevel(Enum):
-    """Confidence levels based on AEGIS accuracy evolution"""
-    VERY_HIGH = "very_high"  # >90% - Like mature AEGIS
-    HIGH = "high"  # 80-90% - Like trained AEGIS  
-    MEDIUM = "medium"  # 70-80% - Like early AEGIS
-    LOW = "low"  # 60-70% - Like pilot AEGIS
-    VERY_LOW = "very_low"  # <60% - Needs human intervention
+# ConfidenceLevel and EscalationType now imported from core_types
 
-class EscalationType(Enum):
-    """Types of human escalation required"""
-    NONE = "none"
-    REVIEW_RECOMMENDED = "review_recommended"
-    EXPERT_REQUIRED = "expert_required"
-    LEGAL_REQUIRED = "legal_required"
-    EXECUTIVE_REQUIRED = "executive_required"
+# CompanyProfile now imported from core_types
+# Add specific risk profile method extension
+def get_risk_profile_extended(self) -> str:
+    """Calculate enhanced risk profile with AEGIS methodology"""
+    risk_score = 0
+    
+    # Industry risk (learned from real compliance data)
+    if self.industry in Config.HIGH_RISK_INDUSTRIES:
+        risk_score += 30
+    
+    # Size risk
+    if self.employee_count > 500:
+        risk_score += 20
+    
+    # Government contractor risk
+    if self.has_government_contracts:
+        risk_score += 25
+    
+    # Previous incidents (enhanced weighting)
+    risk_score += len(self.previous_incidents) * 10
+    
+    if risk_score > 60:
+        return "HIGH"
+    elif risk_score > 30:
+        return "MEDIUM"
+    return "LOW"
 
-@dataclass
-class CompanyProfile:
-    """Company profile for assessment - like a manufacturing batch profile"""
-    company_name: str
-    industry: str
-    employee_count: int
-    country: str = "Australia"
-    has_government_contracts: bool = False
-    annual_revenue: Optional[float] = None
-    current_controls: List[str] = None
-    previous_incidents: List[str] = None
-    compliance_history: Dict[str, Any] = None
-    
-    def __post_init__(self):
-        if self.current_controls is None:
-            self.current_controls = []
-        if self.previous_incidents is None:
-            self.previous_incidents = []
-        if self.compliance_history is None:
-            self.compliance_history = {}
-    
-    def get_risk_profile(self) -> str:
-        """Calculate risk profile like AEGIS calculates defect probability"""
-        risk_score = 0
-        
-        # Industry risk (learned from real compliance data)
-        if self.industry in Config.HIGH_RISK_INDUSTRIES:
-            risk_score += 30
-        
-        # Size risk
-        if self.employee_count > 500:
-            risk_score += 20
-        
-        # Government contractor risk
-        if self.has_government_contracts:
-            risk_score += 25
-        
-        # Previous incidents
-        risk_score += len(self.previous_incidents) * 10
-        
-        if risk_score > 60:
-            return "HIGH"
-        elif risk_score > 30:
-            return "MEDIUM"
-        return "LOW"
+# Extend CompanyProfile with enhanced risk calculation
+CompanyProfile.get_risk_profile = get_risk_profile_extended
 
 @dataclass
 class AssessmentResult:
@@ -520,65 +466,8 @@ class ComplianceKnowledgeGraph:
 # AGENT SYSTEM (Multi-Agent Architecture from AEGIS)
 # ============================================================================
 
-class BaseComplianceAgent(ABC):
-    """
-    Base agent class adapted from AEGIS defect detection agents.
-    Each agent specializes in one aspect, like specialized cameras in AEGIS.
-    """
-    
-    def __init__(self, name: str, expertise: str):
-        self.name = name
-        self.expertise = expertise
-        self.knowledge_graph = ComplianceKnowledgeGraph()
-        self.confidence_history = []  # Track confidence over time
-        self.decision_log = []  # For explainability
-        
-    @abstractmethod
-    async def assess(self, company_profile: CompanyProfile) -> Dict[str, Any]:
-        """Perform specialized assessment"""
-        pass
-    
-    def calculate_confidence(self, assessment: Dict[str, Any]) -> float:
-        """
-        Calculate confidence score for assessment.
-        Based on AEGIS confidence scoring methodology.
-        """
-        
-        base_confidence = 0.7  # Start at early AEGIS level
-        
-        # Factors that increase confidence
-        if len(assessment.get("evidence", [])) > 5:
-            base_confidence += 0.1
-        
-        if assessment.get("data_quality") == "HIGH":
-            base_confidence += 0.1
-        
-        # Factors that decrease confidence  
-        if assessment.get("ambiguous_findings", 0) > 2:
-            base_confidence -= 0.15
-        
-        if assessment.get("missing_data", False):
-            base_confidence -= 0.2
-        
-        # Learn from history (like AEGIS learning from defect patterns)
-        if len(self.confidence_history) > 10:
-            avg_historical = np.mean(self.confidence_history[-10:])
-            base_confidence = 0.7 * base_confidence + 0.3 * avg_historical
-        
-        confidence = max(0.0, min(1.0, base_confidence))
-        self.confidence_history.append(confidence)
-        
-        return confidence
-    
-    def log_decision(self, decision: str, reasoning: str, confidence: float):
-        """Log decision for audit trail and explainability"""
-        self.decision_log.append({
-            "timestamp": datetime.now(),
-            "decision": decision,
-            "reasoning": reasoning,
-            "confidence": confidence,
-            "agent": self.name
-        })
+# BaseComplianceAgent now imported from core_types with dependency injection fixes
+# Knowledge graph will be injected instead of hardcoded instantiation
 
 class Essential8Agent(BaseComplianceAgent):
     """
@@ -589,12 +478,13 @@ class Essential8Agent(BaseComplianceAgent):
     def __init__(self):
         super().__init__(
             name="Essential8Agent",
-            expertise="Australian Essential 8 Maturity Assessment"
+            expertise="Australian Essential 8 Maturity Assessment",
+            framework="Essential8"  # For shared knowledge graph
         )
         
     async def assess(self, company_profile: CompanyProfile) -> Dict[str, Any]:
         """
-        Assess Essential 8 maturity for company.
+        Assess Essential 8 maturity for company with enterprise-grade error handling.
         Similar to AEGIS assessing defect severity.
         """
         
@@ -606,48 +496,136 @@ class Essential8Agent(BaseComplianceAgent):
             "gaps_identified": [],
             "maturity_scores": {},
             "evidence": [],
-            "data_quality": "MEDIUM"  # Conservative default
+            "data_quality": "MEDIUM",  # Conservative default
+            "errors": [],
+            "warnings": []
         }
         
-        # Assess each Essential 8 control
-        for control_id in ["E8_1", "E8_2", "E8_3", "E8_4", "E8_5", "E8_6", "E8_7", "E8_8"]:
-            control_assessment = await self._assess_control(control_id, company_profile)
-            assessment["controls_assessed"].append(control_assessment)
-            
-            # Track maturity
-            assessment["maturity_scores"][control_id] = control_assessment["maturity_level"]
-            
-            # Identify gaps
-            if control_assessment["maturity_level"] < 1:
-                assessment["gaps_identified"].append({
-                    "control": control_id,
-                    "gap_description": control_assessment["gap_description"],
-                    "risk_level": control_assessment["risk_level"],
-                    "remediation_priority": self.knowledge_graph.get_control_importance(
-                        control_id, company_profile
+        try:
+            # Assess each Essential 8 control with individual error handling
+            successful_controls = 0
+            for control_id in ["E8_1", "E8_2", "E8_3", "E8_4", "E8_5", "E8_6", "E8_7", "E8_8"]:
+                try:
+                    control_assessment = await self._assess_control(control_id, company_profile)
+                    assessment["controls_assessed"].append(control_assessment)
+                    
+                    # Track maturity
+                    assessment["maturity_scores"][control_id] = control_assessment["maturity_level"]
+                    
+                    # Identify gaps
+                    if control_assessment["maturity_level"] < 1:
+                        try:
+                            remediation_priority = self.knowledge_graph.get_control_importance(
+                                control_id, company_profile
+                            )
+                        except Exception as kg_error:
+                            logger.warning(f"Knowledge graph error for {control_id}: {kg_error}")
+                            remediation_priority = 0.5  # Default priority
+                            assessment["warnings"].append(f"Could not calculate priority for {control_id}")
+                        
+                        assessment["gaps_identified"].append({
+                            "control": control_id,
+                            "gap_description": control_assessment["gap_description"],
+                            "risk_level": control_assessment["risk_level"],
+                            "remediation_priority": remediation_priority
+                        })
+                    
+                    # Log decision
+                    self.log_decision(
+                        f"Assessed {control_id}",
+                        control_assessment.get("reasoning", "Standard assessment"),
+                        control_assessment.get("confidence", 0.7)
                     )
-                })
+                    
+                    successful_controls += 1
+                    
+                except asyncio.TimeoutError:
+                    error_msg = f"Timeout assessing control {control_id}"
+                    logger.error(error_msg)
+                    assessment["errors"].append(error_msg)
+                    # Add failed control with default values
+                    assessment["controls_assessed"].append({
+                        "control_id": control_id,
+                        "status": "ERROR_TIMEOUT",
+                        "maturity_level": 0,
+                        "confidence": 0.0,
+                        "error": "Assessment timeout"
+                    })
+                    assessment["maturity_scores"][control_id] = 0
+                    
+                except Exception as control_error:
+                    error_msg = f"Error assessing control {control_id}: {str(control_error)}"
+                    logger.error(error_msg)
+                    assessment["errors"].append(error_msg)
+                    # Add failed control with default values
+                    assessment["controls_assessed"].append({
+                        "control_id": control_id,
+                        "status": "ERROR",
+                        "maturity_level": 0,
+                        "confidence": 0.0,
+                        "error": str(control_error)
+                    })
+                    assessment["maturity_scores"][control_id] = 0
             
-            # Log decision
-            self.log_decision(
-                f"Assessed {control_id}",
-                control_assessment.get("reasoning", "Standard assessment"),
-                control_assessment.get("confidence", 0.7)
-            )
-        
-        # Calculate overall maturity (like AEGIS calculating overall quality score)
-        assessment["overall_maturity"] = np.mean(list(assessment["maturity_scores"].values()))
-        
-        # Generate recommendations
-        assessment["recommendations"] = await self._generate_recommendations(
-            assessment["gaps_identified"], 
-            company_profile
-        )
-        
-        # Calculate confidence
-        assessment["confidence"] = self.calculate_confidence(assessment)
-        
-        return assessment
+            # Check if we have enough successful assessments
+            if successful_controls < 4:  # Less than 50% success
+                assessment["data_quality"] = "POOR"
+                assessment["warnings"].append(f"Only {successful_controls}/8 controls assessed successfully")
+            
+            # Calculate overall maturity with error handling
+            try:
+                if assessment["maturity_scores"]:
+                    assessment["overall_maturity"] = np.mean(list(assessment["maturity_scores"].values()))
+                else:
+                    assessment["overall_maturity"] = 0.0
+                    assessment["warnings"].append("No maturity scores available")
+            except Exception as calc_error:
+                logger.error(f"Error calculating overall maturity: {calc_error}")
+                assessment["overall_maturity"] = 0.0
+                assessment["errors"].append("Failed to calculate overall maturity")
+            
+            # Generate recommendations with error handling
+            try:
+                assessment["recommendations"] = await self._generate_recommendations(
+                    assessment["gaps_identified"], 
+                    company_profile
+                )
+            except Exception as rec_error:
+                logger.error(f"Error generating recommendations: {rec_error}")
+                assessment["recommendations"] = []
+                assessment["errors"].append("Failed to generate recommendations")
+            
+            # Calculate confidence with error handling
+            try:
+                assessment["confidence"] = self.calculate_confidence(assessment)
+            except Exception as conf_error:
+                logger.error(f"Error calculating confidence: {conf_error}")
+                assessment["confidence"] = 0.3  # Low confidence due to errors
+                assessment["errors"].append("Failed to calculate confidence")
+            
+            # Adjust confidence based on errors
+            if assessment["errors"]:
+                assessment["confidence"] = max(0.1, assessment["confidence"] * 0.5)
+            
+            return assessment
+            
+        except Exception as critical_error:
+            # Critical failure - return minimal safe assessment
+            logger.critical(f"Critical error in Essential8Agent assessment: {critical_error}")
+            return {
+                "framework": "Essential8",
+                "company": company_profile.company_name,
+                "timestamp": datetime.now(),
+                "status": "CRITICAL_FAILURE",
+                "error": str(critical_error),
+                "confidence": 0.0,
+                "overall_maturity": 0.0,
+                "controls_assessed": [],
+                "gaps_identified": [],
+                "recommendations": [],
+                "escalation_required": True,
+                "escalation_reason": "Critical assessment failure requires human review"
+            }
     
     async def _assess_control(self, control_id: str, company_profile: CompanyProfile) -> Dict[str, Any]:
         """
@@ -886,7 +864,8 @@ class ComplianceOrchestrator:
             "essential8": Essential8Agent(),
             "risk": RiskAnalysisAgent()
         }
-        self.assessment_cache = {}
+        # Use thread-safe cache manager instead of unsafe dict
+        self.cache_manager = get_cache_manager()
         self.escalation_manager = EscalationManager()
         
     async def conduct_assessment(
@@ -901,13 +880,13 @@ class ComplianceOrchestrator:
         
         logger.info(f"Starting assessment for {company_profile.company_name}")
         
-        # Check cache
-        cache_key = self._get_cache_key(company_profile, requested_frameworks)
-        if cache_key in self.assessment_cache:
-            cached = self.assessment_cache[cache_key]
-            if self._is_cache_valid(cached):
-                logger.info("Returning cached assessment")
-                return cached["result"]
+        # Check thread-safe cache
+        cached_result, cache_key = self.cache_manager.get_cached_assessment(
+            company_profile, requested_frameworks or []
+        )
+        if cached_result:
+            logger.info("Returning cached assessment")
+            return cached_result
         
         # Run parallel assessments
         assessment_tasks = []
@@ -935,11 +914,13 @@ class ComplianceOrchestrator:
         # Determine escalation requirements
         assessment = self.escalation_manager.evaluate_escalation(assessment)
         
-        # Cache result
-        self.assessment_cache[cache_key] = {
-            "result": assessment,
-            "timestamp": datetime.now()
-        }
+        # Cache result with thread-safe manager
+        cache_key = self.cache_manager.cache_assessment(
+            company_profile, 
+            requested_frameworks or [], 
+            assessment,
+            ttl_hours=1
+        )
         
         logger.info(f"Assessment complete. Confidence: {assessment.confidence_score:.2f}")
         
@@ -1001,10 +982,10 @@ class ComplianceOrchestrator:
         return result
     
     def _get_cache_key(self, company_profile: CompanyProfile, frameworks: List[str]) -> str:
-        """Generate cache key for assessment"""
+        """Generate secure cache key for assessment using SHA-256"""
         profile_str = f"{company_profile.company_name}_{company_profile.industry}_{company_profile.employee_count}"
         frameworks_str = "_".join(sorted(frameworks)) if frameworks else "all"
-        return hashlib.md5(f"{profile_str}_{frameworks_str}".encode()).hexdigest()
+        return hashlib.sha256(f"{profile_str}_{frameworks_str}".encode()).hexdigest()
     
     def _is_cache_valid(self, cached_item: Dict) -> bool:
         """Check if cached assessment is still valid"""
@@ -1099,7 +1080,7 @@ class HumanReviewInterface:
         """
         
         review_request = {
-            "id": hashlib.md5(str(assessment.timestamp).encode()).hexdigest()[:8],
+            "id": hashlib.sha256(str(assessment.timestamp).encode()).hexdigest()[:8],
             "assessment": assessment,
             "reviewer_type": reviewer_type,
             "requested_at": datetime.now(),

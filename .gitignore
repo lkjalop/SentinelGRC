@@ -217,3 +217,4 @@ sessions/
 # Monitoring
 metrics/
 *.metrics
+.sentinel_key

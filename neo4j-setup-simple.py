@@ -2,7 +2,8 @@
 NEO4J SETUP FOR SENTINEL GRC
 ============================
 Complete Neo4j integration for compliance knowledge graph
-Password: Ag3nt-GRC
+Uses secure configuration management - no hardcoded credentials.
+Set NEO4J_PASSWORD environment variable or use .env file.
 """
 
 # First, install Neo4j driver in your terminal:
@@ -23,10 +24,13 @@ class ComplianceKnowledgeGraph:
     """
     
     def __init__(self):
-        # Neo4j connection details
-        self.uri = "bolt://localhost:7687"  # Default Neo4j address
-        self.username = "neo4j"
-        self.password = "Ag3nt-GRC"  # Your password
+        # Use secure configuration instead of hardcoded credentials
+        from secure_neo4j_config import get_secure_neo4j_config
+        config = get_secure_neo4j_config()
+        
+        self.uri = config.uri
+        self.username = config.username
+        self.password = config.password
         
         try:
             # Connect to Neo4j

@@ -397,9 +397,9 @@ class ComplianceDataScraper:
         return "Unknown"
     
     def generate_content_hash(self, content: str) -> str:
-        """Generate hash to detect content changes"""
+        """Generate secure hash to detect content changes using SHA-256"""
         import hashlib
-        return hashlib.md5(content.encode()).hexdigest()
+        return hashlib.sha256(content.encode()).hexdigest()
     
     async def update_knowledge_graph(self, content: ScrapedContent):
         """

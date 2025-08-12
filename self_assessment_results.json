@@ -1,0 +1,613 @@
+{
+  "main_assessment": {
+    "company_profile": {
+      "company_name": "Sentinel GRC Development Project",
+      "industry": "Technology - Compliance Software",
+      "employee_count": 1,
+      "location": "Australia",
+      "annual_revenue": "$0 (Pre-revenue)",
+      "it_budget": "$0 (Zero-cost architecture)",
+      "current_controls": [
+        "INPUT_VALIDATION",
+        "API_KEY_MANAGEMENT",
+        "RATE_LIMITING",
+        "HTTPS_TRANSPORT",
+        "SESSION_MANAGEMENT",
+        "ERROR_HANDLING",
+        "DATA_SANITIZATION",
+        "AUDIT_LOGGING",
+        "VERSION_CONTROL",
+        "CODE_DOCUMENTATION",
+        "BACKUP_PROCEDURES",
+        "DEPENDENCY_MANAGEMENT",
+        "SECURE_DEFAULTS",
+        "PRIVACY_BY_DESIGN",
+        "DATA_MINIMIZATION",
+        "TRANSPARENCY",
+        "INCIDENT_RESPONSE",
+        "AI_TRANSPARENCY",
+        "HUMAN_OVERSIGHT",
+        "BIAS_MITIGATION",
+        "MODEL_VALIDATION"
+      ],
+      "risk_factors": [
+        "Single developer",
+        "Pre-revenue stage",
+        "Handling sensitive compliance data",
+        "AI/ML decision making",
+        "Zero-cost constraints",
+        "Rapid development timeline"
+      ],
+      "technical_details": {
+        "cloud_providers": [
+          "Supabase",
+          "Neo4j",
+          "Groq",
+          "Streamlit"
+        ],
+        "programming_languages": [
+          "Python"
+        ],
+        "frameworks": [
+          "Streamlit",
+          "FastAPI patterns"
+        ],
+        "databases": [
+          "PostgreSQL (Supabase)",
+          "Neo4j"
+        ],
+        "ai_models": [
+          "Groq LLM",
+          "scikit-learn"
+        ],
+        "deployment": [
+          "Local",
+          "Streamlit Cloud ready"
+        ],
+        "authentication": "Basic (session-based)",
+        "encryption": "Transport (HTTPS) + Environment variables"
+      }
+    },
+    "assessment_date": "2025-08-12T12:13:17.443605",
+    "frameworks_assessed": [
+      "Essential 8",
+      "Privacy Act 1988",
+      "ISO 27001:2022"
+    ],
+    "controls_evaluated": {
+      "E8_1": {
+        "control": "Application Control",
+        "status": "PARTIAL",
+        "evidence": "No malware protection but input validation implemented",
+        "file_references": [
+          "security_utils.py:InputValidator"
+        ],
+        "gap": "No endpoint protection or application whitelisting"
+      },
+      "E8_2": {
+        "control": "Patch Applications",
+        "status": "PARTIAL",
+        "evidence": "Dependencies tracked but no automated patching",
+        "file_references": [
+          "requirements.txt",
+          "pip install commands"
+        ],
+        "gap": "No automated dependency vulnerability scanning"
+      },
+      "E8_5": {
+        "control": "Restrict Administrative Privileges",
+        "status": "IMPLEMENTED",
+        "evidence": "Environment-based secrets, no hardcoded admin access",
+        "file_references": [
+          "secure_config.py",
+          ".gitignore"
+        ],
+        "gap": "No role-based access control system"
+      },
+      "E8_7": {
+        "control": "Multi-factor Authentication",
+        "status": "NOT_IMPLEMENTED",
+        "evidence": "Basic session management only",
+        "file_references": [
+          "security_utils.py:SessionManager"
+        ],
+        "gap": "No MFA for platform access"
+      },
+      "E8_8": {
+        "control": "Regular Backups",
+        "status": "IMPLEMENTED",
+        "evidence": "Git version control + cloud storage",
+        "file_references": [
+          "git repository",
+          "GitHub backup"
+        ],
+        "gap": "No automated backup testing"
+      },
+      "APP1": {
+        "control": "Open and transparent management",
+        "status": "IMPLEMENTED",
+        "evidence": "Comprehensive documentation and open source",
+        "file_references": [
+          "README.md",
+          "DEPLOYMENT_GUIDE.md"
+        ],
+        "gap": "No formal privacy policy"
+      },
+      "APP5": {
+        "control": "Notification of collection",
+        "status": "PARTIAL",
+        "evidence": "User knows what data is collected for assessment",
+        "file_references": [
+          "streamlit_demo.py form fields"
+        ],
+        "gap": "No explicit privacy notice"
+      },
+      "APP6": {
+        "control": "Use or disclosure",
+        "status": "IMPLEMENTED",
+        "evidence": "Data only used for assessment purpose",
+        "file_references": [
+          "Data processing in assessment logic"
+        ],
+        "gap": "No formal data use policy"
+      },
+      "APP11": {
+        "control": "Security of personal information",
+        "status": "PARTIAL",
+        "evidence": "HTTPS transport, input sanitization",
+        "file_references": [
+          "security_utils.py",
+          "Supabase encryption"
+        ],
+        "gap": "No data encryption at rest verification"
+      },
+      "ISO_5.1": {
+        "control": "Policies for information security",
+        "status": "PARTIAL",
+        "evidence": "Security documentation and guidelines",
+        "file_references": [
+          "FINAL_STATUS_REPORT.md security section"
+        ],
+        "gap": "No formal information security policy"
+      },
+      "ISO_6.3": {
+        "control": "Information security awareness",
+        "status": "IMPLEMENTED",
+        "evidence": "Comprehensive security documentation",
+        "file_references": [
+          "security_utils.py comments",
+          "Security guides"
+        ],
+        "gap": "Single developer - no team training needed"
+      },
+      "ISO_8.1": {
+        "control": "User endpoint devices",
+        "status": "BASIC",
+        "evidence": "Local development environment security",
+        "file_references": [
+          "Development machine hardening"
+        ],
+        "gap": "No formal endpoint management"
+      },
+      "ISO_8.2": {
+        "control": "Privileged access rights",
+        "status": "IMPLEMENTED",
+        "evidence": "API keys in environment variables",
+        "file_references": [
+          "Environment variable usage"
+        ],
+        "gap": "No privileged access monitoring"
+      },
+      "ISO_8.28": {
+        "control": "Secure coding",
+        "status": "IMPLEMENTED",
+        "evidence": "Input validation, XSS prevention, secure patterns",
+        "file_references": [
+          "security_utils.py",
+          "Code security practices"
+        ],
+        "gap": "No automated code security scanning"
+      }
+    },
+    "compliance_gaps": [
+      {
+        "control_id": "E8_1",
+        "control_name": "Application Control",
+        "current_status": "PARTIAL",
+        "gap_description": "No endpoint protection or application whitelisting",
+        "evidence": "No malware protection but input validation implemented",
+        "priority": "MEDIUM",
+        "recommendation": "Add endpoint protection and dependency vulnerability scanning",
+        "implementation_effort": "LOW (1 week)",
+        "business_impact": "MEDIUM - Potential security vulnerabilities"
+      },
+      {
+        "control_id": "E8_2",
+        "control_name": "Patch Applications",
+        "current_status": "PARTIAL",
+        "gap_description": "No automated dependency vulnerability scanning",
+        "evidence": "Dependencies tracked but no automated patching",
+        "priority": "MEDIUM",
+        "recommendation": "Implement automated dependency update monitoring (Dependabot)",
+        "implementation_effort": "LOW (2 days)",
+        "business_impact": "MEDIUM - Dependency vulnerabilities"
+      },
+      {
+        "control_id": "E8_7",
+        "control_name": "Multi-factor Authentication",
+        "current_status": "NOT_IMPLEMENTED",
+        "gap_description": "No MFA for platform access",
+        "evidence": "Basic session management only",
+        "priority": "HIGH",
+        "recommendation": "Implement OAuth 2.0 or SAML authentication for production deployment",
+        "implementation_effort": "MEDIUM (2-4 weeks)",
+        "business_impact": "HIGH - Enterprise customers require MFA"
+      },
+      {
+        "control_id": "APP5",
+        "control_name": "Notification of collection",
+        "current_status": "PARTIAL",
+        "gap_description": "No explicit privacy notice",
+        "evidence": "User knows what data is collected for assessment",
+        "priority": "MEDIUM",
+        "recommendation": "Add privacy notice to data collection forms",
+        "implementation_effort": "LOW (1 day)",
+        "business_impact": "LOW - Regulatory requirement"
+      },
+      {
+        "control_id": "APP11",
+        "control_name": "Security of personal information",
+        "current_status": "PARTIAL",
+        "gap_description": "No data encryption at rest verification",
+        "evidence": "HTTPS transport, input sanitization",
+        "priority": "HIGH",
+        "recommendation": "Verify Supabase encryption at rest configuration",
+        "implementation_effort": "LOW (1 day)",
+        "business_impact": "HIGH - Data breach risk"
+      },
+      {
+        "control_id": "ISO_5.1",
+        "control_name": "Policies for information security",
+        "current_status": "PARTIAL",
+        "gap_description": "No formal information security policy",
+        "evidence": "Security documentation and guidelines",
+        "priority": "LOW",
+        "recommendation": "Create formal information security policy document",
+        "implementation_effort": "LOW (2-3 days)",
+        "business_impact": "LOW - Documentation requirement"
+      }
+    ],
+    "overall_maturity": 0.72,
+    "confidence_score": 0.85,
+    "assessment_type": "Self-Assessment - Main Agents Only"
+  },
+  "enhanced_assessment": {
+    "company_profile": {
+      "company_name": "Sentinel GRC Development Project",
+      "industry": "Technology - Compliance Software",
+      "employee_count": 1,
+      "location": "Australia",
+      "annual_revenue": "$0 (Pre-revenue)",
+      "it_budget": "$0 (Zero-cost architecture)",
+      "current_controls": [
+        "INPUT_VALIDATION",
+        "API_KEY_MANAGEMENT",
+        "RATE_LIMITING",
+        "HTTPS_TRANSPORT",
+        "SESSION_MANAGEMENT",
+        "ERROR_HANDLING",
+        "DATA_SANITIZATION",
+        "AUDIT_LOGGING",
+        "VERSION_CONTROL",
+        "CODE_DOCUMENTATION",
+        "BACKUP_PROCEDURES",
+        "DEPENDENCY_MANAGEMENT",
+        "SECURE_DEFAULTS",
+        "PRIVACY_BY_DESIGN",
+        "DATA_MINIMIZATION",
+        "TRANSPARENCY",
+        "INCIDENT_RESPONSE",
+        "AI_TRANSPARENCY",
+        "HUMAN_OVERSIGHT",
+        "BIAS_MITIGATION",
+        "MODEL_VALIDATION"
+      ],
+      "risk_factors": [
+        "Single developer",
+        "Pre-revenue stage",
+        "Handling sensitive compliance data",
+        "AI/ML decision making",
+        "Zero-cost constraints",
+        "Rapid development timeline"
+      ],
+      "technical_details": {
+        "cloud_providers": [
+          "Supabase",
+          "Neo4j",
+          "Groq",
+          "Streamlit"
+        ],
+        "programming_languages": [
+          "Python"
+        ],
+        "frameworks": [
+          "Streamlit",
+          "FastAPI patterns"
+        ],
+        "databases": [
+          "PostgreSQL (Supabase)",
+          "Neo4j"
+        ],
+        "ai_models": [
+          "Groq LLM",
+          "scikit-learn"
+        ],
+        "deployment": [
+          "Local",
+          "Streamlit Cloud ready"
+        ],
+        "authentication": "Basic (session-based)",
+        "encryption": "Transport (HTTPS) + Environment variables"
+      }
+    },
+    "assessment_date": "2025-08-12T12:13:17.443605",
+    "frameworks_assessed": [
+      "Essential 8",
+      "Privacy Act 1988",
+      "ISO 27001:2022"
+    ],
+    "controls_evaluated": {
+      "E8_1": {
+        "control": "Application Control",
+        "status": "PARTIAL",
+        "evidence": "No malware protection but input validation implemented",
+        "file_references": [
+          "security_utils.py:InputValidator"
+        ],
+        "gap": "No endpoint protection or application whitelisting"
+      },
+      "E8_2": {
+        "control": "Patch Applications",
+        "status": "PARTIAL",
+        "evidence": "Dependencies tracked but no automated patching",
+        "file_references": [
+          "requirements.txt",
+          "pip install commands"
+        ],
+        "gap": "No automated dependency vulnerability scanning"
+      },
+      "E8_5": {
+        "control": "Restrict Administrative Privileges",
+        "status": "IMPLEMENTED",
+        "evidence": "Environment-based secrets, no hardcoded admin access",
+        "file_references": [
+          "secure_config.py",
+          ".gitignore"
+        ],
+        "gap": "No role-based access control system"
+      },
+      "E8_7": {
+        "control": "Multi-factor Authentication",
+        "status": "NOT_IMPLEMENTED",
+        "evidence": "Basic session management only",
+        "file_references": [
+          "security_utils.py:SessionManager"
+        ],
+        "gap": "No MFA for platform access"
+      },
+      "E8_8": {
+        "control": "Regular Backups",
+        "status": "IMPLEMENTED",
+        "evidence": "Git version control + cloud storage",
+        "file_references": [
+          "git repository",
+          "GitHub backup"
+        ],
+        "gap": "No automated backup testing"
+      },
+      "APP1": {
+        "control": "Open and transparent management",
+        "status": "IMPLEMENTED",
+        "evidence": "Comprehensive documentation and open source",
+        "file_references": [
+          "README.md",
+          "DEPLOYMENT_GUIDE.md"
+        ],
+        "gap": "No formal privacy policy"
+      },
+      "APP5": {
+        "control": "Notification of collection",
+        "status": "PARTIAL",
+        "evidence": "User knows what data is collected for assessment",
+        "file_references": [
+          "streamlit_demo.py form fields"
+        ],
+        "gap": "No explicit privacy notice"
+      },
+      "APP6": {
+        "control": "Use or disclosure",
+        "status": "IMPLEMENTED",
+        "evidence": "Data only used for assessment purpose",
+        "file_references": [
+          "Data processing in assessment logic"
+        ],
+        "gap": "No formal data use policy"
+      },
+      "APP11": {
+        "control": "Security of personal information",
+        "status": "PARTIAL",
+        "evidence": "HTTPS transport, input sanitization",
+        "file_references": [
+          "security_utils.py",
+          "Supabase encryption"
+        ],
+        "gap": "No data encryption at rest verification"
+      },
+      "ISO_5.1": {
+        "control": "Policies for information security",
+        "status": "PARTIAL",
+        "evidence": "Security documentation and guidelines",
+        "file_references": [
+          "FINAL_STATUS_REPORT.md security section"
+        ],
+        "gap": "No formal information security policy"
+      },
+      "ISO_6.3": {
+        "control": "Information security awareness",
+        "status": "IMPLEMENTED",
+        "evidence": "Comprehensive security documentation",
+        "file_references": [
+          "security_utils.py comments",
+          "Security guides"
+        ],
+        "gap": "Single developer - no team training needed"
+      },
+      "ISO_8.1": {
+        "control": "User endpoint devices",
+        "status": "BASIC",
+        "evidence": "Local development environment security",
+        "file_references": [
+          "Development machine hardening"
+        ],
+        "gap": "No formal endpoint management"
+      },
+      "ISO_8.2": {
+        "control": "Privileged access rights",
+        "status": "IMPLEMENTED",
+        "evidence": "API keys in environment variables",
+        "file_references": [
+          "Environment variable usage"
+        ],
+        "gap": "No privileged access monitoring"
+      },
+      "ISO_8.28": {
+        "control": "Secure coding",
+        "status": "IMPLEMENTED",
+        "evidence": "Input validation, XSS prevention, secure patterns",
+        "file_references": [
+          "security_utils.py",
+          "Code security practices"
+        ],
+        "gap": "No automated code security scanning"
+      }
+    },
+    "compliance_gaps": [
+      {
+        "control_id": "E8_1",
+        "control_name": "Application Control",
+        "current_status": "PARTIAL",
+        "gap_description": "No endpoint protection or application whitelisting",
+        "evidence": "No malware protection but input validation implemented",
+        "priority": "MEDIUM",
+        "recommendation": "Add endpoint protection and dependency vulnerability scanning",
+        "implementation_effort": "LOW (1 week)",
+        "business_impact": "MEDIUM - Potential security vulnerabilities"
+      },
+      {
+        "control_id": "E8_2",
+        "control_name": "Patch Applications",
+        "current_status": "PARTIAL",
+        "gap_description": "No automated dependency vulnerability scanning",
+        "evidence": "Dependencies tracked but no automated patching",
+        "priority": "MEDIUM",
+        "recommendation": "Implement automated dependency update monitoring (Dependabot)",
+        "implementation_effort": "LOW (2 days)",
+        "business_impact": "MEDIUM - Dependency vulnerabilities"
+      },
+      {
+        "control_id": "E8_7",
+        "control_name": "Multi-factor Authentication",
+        "current_status": "NOT_IMPLEMENTED",
+        "gap_description": "No MFA for platform access",
+        "evidence": "Basic session management only",
+        "priority": "HIGH",
+        "recommendation": "Implement OAuth 2.0 or SAML authentication for production deployment",
+        "implementation_effort": "MEDIUM (2-4 weeks)",
+        "business_impact": "HIGH - Enterprise customers require MFA"
+      },
+      {
+        "control_id": "APP5",
+        "control_name": "Notification of collection",
+        "current_status": "PARTIAL",
+        "gap_description": "No explicit privacy notice",
+        "evidence": "User knows what data is collected for assessment",
+        "priority": "MEDIUM",
+        "recommendation": "Add privacy notice to data collection forms",
+        "implementation_effort": "LOW (1 day)",
+        "business_impact": "LOW - Regulatory requirement"
+      },
+      {
+        "control_id": "APP11",
+        "control_name": "Security of personal information",
+        "current_status": "PARTIAL",
+        "gap_description": "No data encryption at rest verification",
+        "evidence": "HTTPS transport, input sanitization",
+        "priority": "HIGH",
+        "recommendation": "Verify Supabase encryption at rest configuration",
+        "implementation_effort": "LOW (1 day)",
+        "business_impact": "HIGH - Data breach risk"
+      },
+      {
+        "control_id": "ISO_5.1",
+        "control_name": "Policies for information security",
+        "current_status": "PARTIAL",
+        "gap_description": "No formal information security policy",
+        "evidence": "Security documentation and guidelines",
+        "priority": "LOW",
+        "recommendation": "Create formal information security policy document",
+        "implementation_effort": "LOW (2-3 days)",
+        "business_impact": "LOW - Documentation requirement"
+      }
+    ],
+    "overall_maturity": 0.72,
+    "confidence_score": 0.85,
+    "assessment_type": "Self-Assessment - Enhanced with Sidecar Agents",
+    "sidecar_analysis": {
+      "legal_analysis": {
+        "regulatory_compliance": "MEDIUM",
+        "legal_risks": [
+          "No formal privacy policy despite handling organization data",
+          "Potential liability for AI-driven compliance decisions",
+          "Open source licensing considerations for commercial use"
+        ],
+        "recommendations": [
+          "Draft Terms of Service and Privacy Policy",
+          "Add liability disclaimers for AI recommendations",
+          "Clarify intellectual property rights for commercial use"
+        ]
+      },
+      "threat_modeling": {
+        "threat_landscape": "TECHNOLOGY_FOCUSED",
+        "identified_threats": [
+          "Supply chain attacks via dependencies",
+          "API key compromise in development",
+          "Data poisoning of AI models",
+          "Social engineering targeting solo developer",
+          "Cloud provider service disruption"
+        ],
+        "mitigation_strategies": [
+          "Implement dependency vulnerability scanning",
+          "Use hardware security keys for development accounts",
+          "Monitor AI model outputs for anomalies",
+          "Enable 2FA on all development accounts",
+          "Implement multi-cloud backup strategy"
+        ],
+        "risk_score": 0.65
+      },
+      "enhanced_metrics": {
+        "technical_debt_score": 0.25,
+        "security_maturity": 0.68,
+        "operational_resilience": 0.45,
+        "compliance_readiness": 0.78
+      }
+    },
+    "enhanced_confidence": 0.92,
+    "additional_recommendations": [
+      "Consider SOC 2 compliance preparation for enterprise customers",
+      "Implement chaos engineering for resilience testing",
+      "Establish bug bounty program for security validation",
+      "Create disaster recovery procedures documentation"
+    ]
+  },
+  "generated_at": "2025-08-12T12:13:19.028747"
+}

@@ -17,9 +17,13 @@ class EnterpriseFrameworkExpansion:
     """Adds key enterprise frameworks to Neo4j knowledge graph"""
     
     def __init__(self):
-        self.uri = "bolt://localhost:7687"
-        self.username = "neo4j"
-        self.password = "Ag3nt-GRC"
+        # Use secure configuration instead of hardcoded credentials
+        from secure_neo4j_config import get_secure_neo4j_config
+        config = get_secure_neo4j_config()
+        
+        self.uri = config.uri
+        self.username = config.username
+        self.password = config.password
         
         try:
             self.driver = GraphDatabase.driver(self.uri, auth=(self.username, self.password))
