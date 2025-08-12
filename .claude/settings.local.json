@@ -19,7 +19,9 @@
       "Bash(git reset:*)",
       "Bash(rm:*)",
       "Bash(mv:*)",
-      "Bash(gh api:*)"
+      "Bash(gh api:*)",
+      "Bash(git commit:*)",
+      "Bash(mkdir:*)"
     ],
     "deny": []
   }
