@@ -13,7 +13,7 @@ jobs:
   dependency-check:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v5
       
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -45,7 +45,7 @@ jobs:
   code-quality:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v5
       
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -69,7 +69,7 @@ jobs:
   secret-scanning:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v5
       
       - name: Run TruffleHog (secret scanning)
         uses: trufflesecurity/trufflehog@main
