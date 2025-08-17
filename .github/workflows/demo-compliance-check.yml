@@ -1,0 +1,93 @@
+name: 'Demo: Cerberus AI Compliance Check'
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:  # Allow manual trigger
+
+jobs:
+  compliance-validation:
+    name: 'Compliance Validation'
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: read
+      security-events: write
+      pull-requests: write
+    
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: 'Cerberus AI - Compliance Check'
+        uses: ./.github/actions/cerberus-compliance
+        id: compliance
+        with:
+          server-url: 'http://localhost:8000'  # Local development server
+          api-key: ${{ secrets.CERBERUS_API_KEY || 'demo-key-12345' }}
+          frameworks: 'essential8,nistcsf'
+          severity-threshold: 'medium'
+          mode: 'validate'
+          output-format: 'sarif'
+          fail-on-violations: 'false'  # Don't fail build in demo
+          human-review-threshold: 'high'
+      
+      - name: Upload SARIF Results
+        uses: github/codeql-action/upload-sarif@v2
+        if: always() && steps.compliance.outputs.violations-found > 0
+        with:
+          sarif_file: cerberus-reports/compliance-results.sarif
+        continue-on-error: true
+      
+      - name: Archive Compliance Reports
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: compliance-reports
+          path: cerberus-reports/
+          retention-days: 30
+      
+      - name: Display Results Summary
+        if: always()
+        run: |
+          echo "🔱 Cerberus AI Compliance Results"
+          echo "================================="
+          echo "Compliance Score: ${{ steps.compliance.outputs.compliance-score }}/100"
+          echo "Violations Found: ${{ steps.compliance.outputs.violations-found }}"
+          echo "Frameworks Checked: ${{ steps.compliance.outputs.frameworks-checked }}"
+          echo "Human Review Required: ${{ steps.compliance.outputs.human-review-required }}"
+          echo ""
+          if [ -f "cerberus-reports/compliance-summary.md" ]; then
+            echo "📝 Compliance Summary:"
+            cat cerberus-reports/compliance-summary.md
+          fi
+
+  # Example of conditional jobs based on compliance results
+  deploy-staging:
+    name: 'Deploy to Staging'
+    runs-on: ubuntu-latest
+    needs: compliance-validation
+    if: needs.compliance-validation.outputs.compliance-score >= 70
+    
+    steps:
+      - name: Deploy to Staging
+        run: |
+          echo "🚀 Deploying to staging environment..."
+          echo "Compliance score met threshold: ${{ needs.compliance-validation.outputs.compliance-score }}"
+
+  notify-grc-team:
+    name: 'Notify GRC Team'
+    runs-on: ubuntu-latest
+    needs: compliance-validation
+    if: needs.compliance-validation.outputs.human-review-required == 'true'
+    
+    steps:
+      - name: Notify GRC Team
+        run: |
+          echo "👥 Human review required - notifying GRC team"
+          echo "This would integrate with Slack, Teams, or email systems"
+          echo "Violations: ${{ needs.compliance-validation.outputs.violations-found }}"

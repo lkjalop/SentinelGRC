@@ -1,0 +1,360 @@
+# Cerberus AI GitLab CI Integration Template
+# Add this to your .gitlab-ci.yml file to enable compliance validation
+
+# Define Cerberus AI compliance job template
+.cerberus_compliance_template: &cerberus_compliance
+  stage: compliance
+  image: registry.cerberus-ai.com/cerberus-cli:latest
+  variables:
+    CERBERUS_SERVER_URL: "https://api.cerberus-ai.com"
+    CERBERUS_FRAMEWORKS: "essential8"
+    CERBERUS_MODE: "validate"
+    CERBERUS_SEVERITY_THRESHOLD: "medium"
+    CERBERUS_OUTPUT_FORMAT: "gitlab"
+    CERBERUS_FAIL_ON_VIOLATIONS: "true"
+    CERBERUS_HUMAN_REVIEW_THRESHOLD: "high"
+  before_script:
+    - echo "🔱 Starting Cerberus AI Compliance Validation"
+    - cerberus-cli version
+  script:
+    - |
+      # Run Cerberus AI compliance check
+      cerberus-cli validate \
+        --server-url "$CERBERUS_SERVER_URL" \
+        --api-key "$CERBERUS_API_KEY" \
+        --frameworks "$CERBERUS_FRAMEWORKS" \
+        --mode "$CERBERUS_MODE" \
+        --severity-threshold "$CERBERUS_SEVERITY_THRESHOLD" \
+        --output-format "$CERBERUS_OUTPUT_FORMAT" \
+        --fail-on-violations "$CERBERUS_FAIL_ON_VIOLATIONS" \
+        --human-review-threshold "$CERBERUS_HUMAN_REVIEW_THRESHOLD" \
+        --project-path "$CI_PROJECT_DIR" \
+        --commit-sha "$CI_COMMIT_SHA" \
+        --branch "$CI_COMMIT_REF_NAME" \
+        --merge-request-iid "$CI_MERGE_REQUEST_IID" \
+        --output-dir "cerberus-reports"
+  after_script:
+    - echo "📊 Compliance validation completed"
+    - |
+      if [ -f "cerberus-reports/compliance-summary.json" ]; then
+        echo "📋 Compliance Summary:"
+        cat cerberus-reports/compliance-summary.json | jq -r '
+          "Compliance Score: \(.compliance_score)/100",
+          "Violations Found: \(.violations_count)",
+          "Frameworks Checked: \(.frameworks_checked | join(", "))",
+          "Human Review Required: \(if .human_review_required then "Yes" else "No" end)"
+        '
+      fi
+  artifacts:
+    reports:
+      # GitLab Security Dashboard integration
+      sast: cerberus-reports/gl-sast-report.json
+      # Code Quality integration  
+      codequality: cerberus-reports/gl-code-quality-report.json
+    paths:
+      - cerberus-reports/
+    expire_in: 30 days
+    when: always
+  coverage: '/Compliance Score: (\d+)/'
+
+# Default pipeline stages
+stages:
+  - build
+  - test
+  - compliance
+  - deploy
+
+# Basic compliance job
+cerberus_compliance:
+  <<: *cerberus_compliance
+  only:
+    - main
+    - develop
+    - merge_requests
+
+# Quick compliance check for feature branches
+cerberus_quick_check:
+  <<: *cerberus_compliance
+  variables:
+    CERBERUS_FRAMEWORKS: "essential8"
+    CERBERUS_MODE: "validate"
+    CERBERUS_FAIL_ON_VIOLATIONS: "false"
+  only:
+    - branches
+  except:
+    - main
+    - develop
+
+# Comprehensive audit for releases
+cerberus_audit:
+  <<: *cerberus_compliance
+  variables:
+    CERBERUS_FRAMEWORKS: "essential8,nistcsf,soc2,gdpr"
+    CERBERUS_MODE: "audit"
+    CERBERUS_SEVERITY_THRESHOLD: "low"
+    CERBERUS_HUMAN_REVIEW_THRESHOLD: "medium"
+  only:
+    - tags
+  when: manual
+
+# Enterprise multi-framework validation
+cerberus_enterprise:
+  <<: *cerberus_compliance
+  variables:
+    CERBERUS_SERVER_URL: "https://enterprise.cerberus-ai.com"
+    CERBERUS_FRAMEWORKS: "essential8,nistcsf,soc2,gdpr,iso27001,pcidss,hipaa"
+    CERBERUS_MODE: "audit"
+    CERBERUS_SEVERITY_THRESHOLD: "low"
+    CERBERUS_OUTPUT_FORMAT: "all"
+  only:
+    - schedules
+  when: manual
+  allow_failure: false
+
+# Container security compliance
+cerberus_container:
+  stage: compliance
+  image: registry.cerberus-ai.com/cerberus-cli:latest
+  services:
+    - docker:dind
+  variables:
+    DOCKER_TLS_CERTDIR: "/certs"
+  before_script:
+    - docker info
+  script:
+    - |
+      # Build container
+      docker build -t $CI_PROJECT_NAME:$CI_COMMIT_SHA .
+      
+      # Run container compliance scan
+      cerberus-cli container-scan \
+        --server-url "$CERBERUS_SERVER_URL" \
+        --api-key "$CERBERUS_API_KEY" \
+        --image "$CI_PROJECT_NAME:$CI_COMMIT_SHA" \
+        --frameworks "essential8,nistcsf" \
+        --output-dir "cerberus-reports"
+  artifacts:
+    paths:
+      - cerberus-reports/
+  only:
+    - main
+    - merge_requests
+
+# Infrastructure as Code compliance
+cerberus_iac:
+  <<: *cerberus_compliance
+  variables:
+    CERBERUS_FRAMEWORKS: "nistcsf,soc2"
+    CERBERUS_MODE: "validate"
+  script:
+    - |
+      # Scan Terraform, CloudFormation, Kubernetes manifests
+      cerberus-cli iac-scan \
+        --server-url "$CERBERUS_SERVER_URL" \
+        --api-key "$CERBERUS_API_KEY" \
+        --frameworks "$CERBERUS_FRAMEWORKS" \
+        --scan-path "$CI_PROJECT_DIR" \
+        --include-patterns "*.tf,*.yaml,*.yml,*.json" \
+        --exclude-patterns "node_modules/,vendor/" \
+        --output-dir "cerberus-reports"
+  only:
+    changes:
+      - "**/*.tf"
+      - "**/*.yaml"
+      - "**/*.yml"
+      - "**/Dockerfile"
+      - "**/*k8s*"
+
+# Multi-region compliance validation
+cerberus_multi_region:
+  stage: compliance
+  image: registry.cerberus-ai.com/cerberus-cli:latest
+  parallel:
+    matrix:
+      - REGION: ["australia", "united_states", "european_union"]
+        FRAMEWORKS: ["essential8", "nistcsf", "gdpr"]
+  variables:
+    CERBERUS_MODE: "validate"
+  script:
+    - |
+      echo "🌍 Running compliance validation for $REGION"
+      cerberus-cli multi-region \
+        --server-url "$CERBERUS_SERVER_URL" \
+        --api-key "$CERBERUS_API_KEY" \
+        --region "$REGION" \
+        --frameworks "$FRAMEWORKS" \
+        --mode "$CERBERUS_MODE" \
+        --output-dir "cerberus-reports-$REGION"
+  artifacts:
+    paths:
+      - cerberus-reports-*/
+    reports:
+      codequality: cerberus-reports-$REGION/gl-code-quality-report.json
+  only:
+    - main
+    - schedules
+
+# Human review notification job
+cerberus_notify_humans:
+  stage: compliance
+  image: alpine:latest
+  dependencies:
+    - cerberus_compliance
+  before_script:
+    - apk add --no-cache curl jq
+  script:
+    - |
+      # Check if human review is required
+      if [ -f "cerberus-reports/compliance-summary.json" ]; then
+        HUMAN_REVIEW_REQUIRED=$(cat cerberus-reports/compliance-summary.json | jq -r '.human_review_required')
+        
+        if [ "$HUMAN_REVIEW_REQUIRED" = "true" ]; then
+          echo "👥 Human review required - notifying GRC team"
+          
+          # Send Slack notification (replace with your webhook)
+          curl -X POST -H 'Content-type: application/json' \
+            --data "{
+              \"text\": \"🔱 Cerberus AI: Human review required for $CI_PROJECT_NAME\",
+              \"blocks\": [
+                {
+                  \"type\": \"section\",
+                  \"text\": {
+                    \"type\": \"mrkdwn\",
+                    \"text\": \"*Project:* $CI_PROJECT_NAME\n*Branch:* $CI_COMMIT_REF_NAME\n*Pipeline:* <$CI_PIPELINE_URL|#$CI_PIPELINE_ID>\n*Requires:* GRC Expert Review\"
+                  }
+                }
+              ]
+            }" \
+            $SLACK_WEBHOOK_URL || echo "Slack notification failed"
+            
+          # Send email notification
+          echo "Human review required for compliance validation" | \
+            mail -s "Cerberus AI: Review Required - $CI_PROJECT_NAME" \
+            grc-team@company.com || echo "Email notification failed"
+        else
+          echo "✅ No human review required"
+        fi
+      fi
+  only:
+    - main
+    - merge_requests
+  when: always
+  allow_failure: true
+
+# Deploy only if compliance passes
+deploy_production:
+  stage: deploy
+  script:
+    - echo "🚀 Deploying to production..."
+    - ./deploy.sh production
+  dependencies:
+    - cerberus_compliance
+  only:
+    - main
+  when: manual
+  before_script:
+    - |
+      # Check compliance score before deploying
+      if [ -f "cerberus-reports/compliance-summary.json" ]; then
+        COMPLIANCE_SCORE=$(cat cerberus-reports/compliance-summary.json | jq -r '.compliance_score')
+        
+        if [ "$COMPLIANCE_SCORE" -lt "80" ]; then
+          echo "❌ Compliance score ($COMPLIANCE_SCORE%) below deployment threshold (80%)"
+          exit 1
+        else
+          echo "✅ Compliance score ($COMPLIANCE_SCORE%) meets deployment threshold"
+        fi
+      else
+        echo "⚠️ No compliance report found - proceeding with caution"
+      fi
+
+# Scheduled comprehensive audit
+weekly_compliance_audit:
+  <<: *cerberus_compliance
+  variables:
+    CERBERUS_FRAMEWORKS: "essential8,nistcsf,soc2,gdpr,iso27001"
+    CERBERUS_MODE: "audit"
+    CERBERUS_SEVERITY_THRESHOLD: "low"
+    CERBERUS_OUTPUT_FORMAT: "all"
+  script:
+    - |
+      # Run comprehensive weekly audit
+      cerberus-cli audit \
+        --server-url "$CERBERUS_SERVER_URL" \
+        --api-key "$CERBERUS_API_KEY" \
+        --frameworks "$CERBERUS_FRAMEWORKS" \
+        --mode "audit" \
+        --include-historical \
+        --generate-trends \
+        --output-dir "cerberus-weekly-audit"
+        
+      # Generate executive summary
+      cerberus-cli generate-executive-summary \
+        --input-dir "cerberus-weekly-audit" \
+        --output "executive-summary.pdf"
+  artifacts:
+    paths:
+      - cerberus-weekly-audit/
+      - executive-summary.pdf
+    expire_in: 90 days
+  only:
+    - schedules
+  when: delayed
+  start_in: 5 minutes
+
+# Example: Custom compliance rules
+cerberus_custom_rules:
+  <<: *cerberus_compliance
+  variables:
+    CERBERUS_CUSTOM_RULES_PATH: "./compliance-rules"
+  before_script:
+    - echo "📋 Loading custom compliance rules from $CERBERUS_CUSTOM_RULES_PATH"
+    - ls -la $CERBERUS_CUSTOM_RULES_PATH/
+  script:
+    - |
+      cerberus-cli validate \
+        --server-url "$CERBERUS_SERVER_URL" \
+        --api-key "$CERBERUS_API_KEY" \
+        --frameworks "$CERBERUS_FRAMEWORKS" \
+        --custom-rules "$CERBERUS_CUSTOM_RULES_PATH" \
+        --output-dir "cerberus-reports"
+  only:
+    changes:
+      - compliance-rules/**/*
+      - src/**/*
+
+# Example: Performance impact monitoring
+cerberus_performance:
+  stage: compliance
+  image: registry.cerberus-ai.com/cerberus-cli:latest
+  script:
+    - |
+      echo "⏱️ Monitoring Cerberus AI performance impact"
+      
+      # Measure compliance check performance
+      START_TIME=$(date +%s)
+      
+      cerberus-cli validate \
+        --server-url "$CERBERUS_SERVER_URL" \
+        --api-key "$CERBERUS_API_KEY" \
+        --frameworks "essential8" \
+        --mode "validate" \
+        --measure-performance \
+        --output-dir "cerberus-reports"
+      
+      END_TIME=$(date +%s)
+      DURATION=$((END_TIME - START_TIME))
+      
+      echo "📊 Compliance check completed in ${DURATION} seconds"
+      
+      # Fail if too slow (over 5 minutes)
+      if [ $DURATION -gt 300 ]; then
+        echo "❌ Compliance check too slow ($DURATION seconds > 300 seconds threshold)"
+        exit 1
+      fi
+  artifacts:
+    reports:
+      performance: cerberus-reports/performance-metrics.json
+  only:
+    - main
+    - develop

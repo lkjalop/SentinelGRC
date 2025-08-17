@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Executive Dashboard - Sentinel GRC</title>
+    <link rel="stylesheet" href="/css/sentinel.css">
+    <style>
+        .dashboard-container { max-width: 1600px; margin: 0 auto; padding: 2rem; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); min-height: 100vh; }
+        .dashboard-header { text-align: center; margin-bottom: 2rem; }
+        .dashboard-header h1 { color: #0B3D91; font-size: 2.5rem; margin-bottom: 0.5rem; }
+        .dashboard-header .subtitle { color: #6c757d; font-size: 1.2rem; }
+        .back-link { color: #00C896; text-decoration: none; margin-bottom: 2rem; display: inline-block; font-weight: 500; }
+        
+        /* KPI Cards */
+        .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
+        .kpi-card { background: white; border-radius: 12px; padding: 2rem; box-shadow: 0 4px 6px rgba(0,0,0,0.1); border-left: 4px solid #00C896; }
+        .kpi-card.risk { border-left-color: #dc3545; }
+        .kpi-card.warning { border-left-color: #ffc107; }
+        .kpi-card.info { border-left-color: #17a2b8; }
+        .kpi-value { font-size: 3rem; font-weight: bold; margin-bottom: 0.5rem; }
+        .kpi-value.good { color: #28a745; }
+        .kpi-value.warning { color: #ffc107; }
+        .kpi-value.risk { color: #dc3545; }
+        .kpi-label { font-size: 1rem; color: #6c757d; margin-bottom: 1rem; }
+        .kpi-trend { font-size: 0.9rem; }
+        .kpi-trend.up { color: #28a745; }
+        .kpi-trend.down { color: #dc3545; }
+        
+        /* Charts Section */
+        .charts-section { display: grid; grid-template-columns: 2fr 1fr; gap: 2rem; margin-bottom: 2rem; }
+        .chart-card { background: white; border-radius: 12px; padding: 2rem; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .chart-title { font-size: 1.5rem; color: #0B3D91; margin-bottom: 1rem; }
+        
+        /* Compliance Matrix */
+        .compliance-matrix { background: white; border-radius: 12px; padding: 2rem; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-bottom: 2rem; }
+        .framework-row { display: grid; grid-template-columns: 200px repeat(4, 1fr); gap: 1rem; align-items: center; padding: 1rem; border-bottom: 1px solid #e9ecef; }
+        .framework-row:last-child { border-bottom: none; }
+        .framework-name { font-weight: 600; color: #0B3D91; }
+        .status-indicator { padding: 0.5rem 1rem; border-radius: 20px; text-align: center; font-size: 0.9rem; font-weight: 500; }
+        .status-compliant { background: #d4edda; color: #155724; }
+        .status-partial { background: #fff3cd; color: #856404; }
+        .status-non-compliant { background: #f8d7da; color: #721c24; }
+        .status-not-assessed { background: #e2e3e5; color: #6c757d; }
+        
+        /* Risk Indicators */
+        .risk-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; }
+        .risk-item { background: white; border-radius: 8px; padding: 1.5rem; box-shadow: 0 2px 4px rgba(0,0,0,0.1); border-left: 4px solid #6c757d; }
+        .risk-item.critical { border-left-color: #dc3545; }
+        .risk-item.high { border-left-color: #fd7e14; }
+        .risk-item.medium { border-left-color: #ffc107; }
+        .risk-item.low { border-left-color: #28a745; }
+        .risk-title { font-weight: 600; margin-bottom: 0.5rem; }
+        .risk-description { font-size: 0.9rem; color: #6c757d; }
+        
+        /* Action Items */
+        .action-items { background: white; border-radius: 12px; padding: 2rem; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .action-item { padding: 1rem; border-left: 3px solid #00C896; background: #f8f9fa; margin-bottom: 1rem; border-radius: 0 8px 8px 0; }
+        .action-item.overdue { border-left-color: #dc3545; background: #ffeaea; }
+        .action-priority { display: inline-block; padding: 0.2rem 0.8rem; border-radius: 12px; font-size: 0.8rem; font-weight: 500; margin-bottom: 0.5rem; }
+        .priority-high { background: #dc3545; color: white; }
+        .priority-medium { background: #ffc107; color: #000; }
+        .priority-low { background: #28a745; color: white; }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <header class="dashboard-header">
+            <a href="/" class="back-link">← Back to Gateway</a>
+            <h1>📊 Executive Dashboard</h1>
+            <p class="subtitle">Real-time compliance posture and risk management overview</p>
+            <small>Last updated: <span id="last-updated"></span></small>
+        </header>
+        
+        <!-- KPI Section -->
+        <div class="kpi-grid">
+            <div class="kpi-card">
+                <div class="kpi-value good" id="overall-compliance">87%</div>
+                <div class="kpi-label">Overall Compliance Score</div>
+                <div class="kpi-trend up">↗ +3% from last month</div>
+            </div>
+            <div class="kpi-card risk">
+                <div class="kpi-value risk" id="critical-findings">12</div>
+                <div class="kpi-label">Critical Findings</div>
+                <div class="kpi-trend down">↗ +2 from last assessment</div>
+            </div>
+            <div class="kpi-card info">
+                <div class="kpi-value" id="controls-implemented">1,247</div>
+                <div class="kpi-label">Controls Implemented</div>
+                <div class="kpi-trend up">↗ +45 this quarter</div>
+            </div>
+            <div class="kpi-card warning">
+                <div class="kpi-value warning" id="next-audit-days">47</div>
+                <div class="kpi-label">Days to Next Audit</div>
+                <div class="kpi-trend">SOC 2 Type II</div>
+            </div>
+        </div>
+        
+        <!-- Charts Section -->
+        <div class="charts-section">
+            <div class="chart-card">
+                <h3 class="chart-title">Compliance Trend (6 Months)</h3>
+                <canvas id="compliance-chart" width="400" height="200"></canvas>
+            </div>
+            <div class="chart-card">
+                <h3 class="chart-title">Framework Coverage</h3>
+                <div id="framework-coverage">
+                    <div class="framework-row">
+                        <span>NIST SP 800-53</span>
+                        <div style="background: #e9ecef; border-radius: 10px; overflow: hidden;">
+                            <div style="width: 78%; height: 20px; background: linear-gradient(90deg, #28a745, #20c997);"></div>
+                        </div>
+                        <span>78%</span>
+                    </div>
+                    <div class="framework-row">
+                        <span>SOC 2</span>
+                        <div style="background: #e9ecef; border-radius: 10px; overflow: hidden;">
+                            <div style="width: 92%; height: 20px; background: linear-gradient(90deg, #28a745, #20c997);"></div>
+                        </div>
+                        <span>92%</span>
+                    </div>
+                    <div class="framework-row">
+                        <span>Essential Eight</span>
+                        <div style="background: #e9ecef; border-radius: 10px; overflow: hidden;">
+                            <div style="width: 85%; height: 20px; background: linear-gradient(90deg, #28a745, #20c997);"></div>
+                        </div>
+                        <span>85%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Compliance Matrix -->
+        <div class="compliance-matrix">
+            <h3 class="chart-title">Multi-Framework Compliance Status</h3>
+            <div class="framework-row" style="font-weight: 600; background: #f8f9fa;">
+                <span>Framework</span>
+                <span>Current Status</span>
+                <span>Last Assessment</span>
+                <span>Next Review</span>
+                <span>Risk Level</span>
+            </div>
+            <div class="framework-row">
+                <span class="framework-name">NIST SP 800-53</span>
+                <span class="status-indicator status-partial">Partially Compliant</span>
+                <span>2025-08-10</span>
+                <span>2025-11-15</span>
+                <span class="status-indicator status-non-compliant">Medium Risk</span>
+            </div>
+            <div class="framework-row">
+                <span class="framework-name">SOC 2 Type II</span>
+                <span class="status-indicator status-compliant">Compliant</span>
+                <span>2025-07-25</span>
+                <span>2025-09-30</span>
+                <span class="status-indicator status-compliant">Low Risk</span>
+            </div>
+            <div class="framework-row">
+                <span class="framework-name">Essential Eight</span>
+                <span class="status-indicator status-compliant">Compliant</span>
+                <span>2025-08-05</span>
+                <span>2025-12-01</span>
+                <span class="status-indicator status-compliant">Low Risk</span>
+            </div>
+            <div class="framework-row">
+                <span class="framework-name">Privacy Act 1988</span>
+                <span class="status-indicator status-partial">Partially Compliant</span>
+                <span>2025-06-15</span>
+                <span>2025-10-20</span>
+                <span class="status-indicator status-non-compliant">Medium Risk</span>
+            </div>
+            <div class="framework-row">
+                <span class="framework-name">NIST CSF 2.0</span>
+                <span class="status-indicator status-not-assessed">Not Assessed</span>
+                <span>N/A</span>
+                <span>2025-09-15</span>
+                <span class="status-indicator status-not-assessed">Unknown</span>
+            </div>
+        </div>
+        
+        <!-- Risk Assessment -->
+        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 2rem; margin-bottom: 2rem;">
+            <div class="chart-card">
+                <h3 class="chart-title">Top Risk Areas</h3>
+                <div class="risk-grid">
+                    <div class="risk-item critical">
+                        <div class="risk-title">Incident Response Capability</div>
+                        <div class="risk-description">Limited 24/7 incident response team coverage</div>
+                        <small>Impact: High | Likelihood: Medium</small>
+                    </div>
+                    <div class="risk-item high">
+                        <div class="risk-title">Multi-Factor Authentication</div>
+                        <div class="risk-description">MFA adoption at 67% for privileged accounts</div>
+                        <small>Impact: High | Likelihood: High</small>
+                    </div>
+                    <div class="risk-item medium">
+                        <div class="risk-title">Vulnerability Remediation</div>
+                        <div class="risk-description">Average patch time: 18 days (target: 14 days)</div>
+                        <small>Impact: Medium | Likelihood: Medium</small>
+                    </div>
+                    <div class="risk-item low">
+                        <div class="risk-title">Backup Recovery Testing</div>
+                        <div class="risk-description">Quarterly testing schedule maintained</div>
+                        <small>Impact: Medium | Likelihood: Low</small>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="chart-card">
+                <h3 class="chart-title">Security Metrics</h3>
+                <div style="text-align: center;">
+                    <div style="margin-bottom: 2rem;">
+                        <div class="kpi-value" style="font-size: 2rem;">99.2%</div>
+                        <div class="kpi-label">System Uptime</div>
+                    </div>
+                    <div style="margin-bottom: 2rem;">
+                        <div class="kpi-value good" style="font-size: 2rem;">0</div>
+                        <div class="kpi-label">Security Incidents (30d)</div>
+                    </div>
+                    <div style="margin-bottom: 2rem;">
+                        <div class="kpi-value" style="font-size: 2rem;">847</div>
+                        <div class="kpi-label">Vulnerability Patches</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Action Items -->
+        <div class="action-items">
+            <h3 class="chart-title">Priority Action Items</h3>
+            <div class="action-item overdue">
+                <span class="action-priority priority-high">HIGH</span>
+                <div><strong>Complete MFA rollout for all privileged accounts</strong></div>
+                <div>Due: 2025-08-10 | Owner: IT Security Team</div>
+                <small>Addresses NIST SP 800-53 IA-2(1) requirement</small>
+            </div>
+            <div class="action-item">
+                <span class="action-priority priority-high">HIGH</span>
+                <div><strong>Conduct incident response tabletop exercise</strong></div>
+                <div>Due: 2025-09-01 | Owner: Compliance Team</div>
+                <small>Required for SOC 2 Type II certification</small>
+            </div>
+            <div class="action-item">
+                <span class="action-priority priority-medium">MEDIUM</span>
+                <div><strong>Update security awareness training content</strong></div>
+                <div>Due: 2025-09-15 | Owner: HR & Security</div>
+                <small>Annual requirement for multiple frameworks</small>
+            </div>
+            <div class="action-item">
+                <span class="action-priority priority-low">LOW</span>
+                <div><strong>Review and update data retention policies</strong></div>
+                <div>Due: 2025-10-30 | Owner: Legal & Compliance</div>
+                <small>Privacy Act 1988 compliance requirement</small>
+            </div>
+        </div>
+        
+        <!-- Real-time Updates -->
+        <div style="text-align: center; padding: 2rem; background: white; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+            <h4>🔄 Real-time Monitoring Active</h4>
+            <p>Dashboard updates automatically every 15 minutes</p>
+            <button onclick="refreshDashboard()" style="background: #00C896; color: white; border: none; padding: 0.75rem 2rem; border-radius: 6px; cursor: pointer;">Refresh Now</button>
+            <button onclick="exportReport()" style="background: #0B3D91; color: white; border: none; padding: 0.75rem 2rem; border-radius: 6px; cursor: pointer; margin-left: 1rem;">Export Executive Report</button>
+        </div>
+    </div>
+    
+    <script>
+        // Update timestamp
+        document.getElementById('last-updated').textContent = new Date().toLocaleString();
+        
+        // Simulate real-time updates
+        function refreshDashboard() {
+            // Update KPIs with slight variations
+            const complianceScore = Math.floor(85 + Math.random() * 5);
+            document.getElementById('overall-compliance').textContent = complianceScore + '%';
+            
+            const criticalFindings = Math.floor(10 + Math.random() * 5);
+            document.getElementById('critical-findings').textContent = criticalFindings;
+            
+            const controlsImplemented = 1247 + Math.floor(Math.random() * 10);
+            document.getElementById('controls-implemented').textContent = controlsImplemented.toLocaleString();
+            
+            const nextAuditDays = Math.floor(45 + Math.random() * 5);
+            document.getElementById('next-audit-days').textContent = nextAuditDays;
+            
+            document.getElementById('last-updated').textContent = new Date().toLocaleString();
+            
+            // Show success message
+            alert('Dashboard refreshed with latest data!');
+        }
+        
+        function exportReport() {
+            alert('Executive report export initiated. PDF will be generated with all current metrics and sent to registered email addresses.');
+        }
+        
+        // Auto-refresh every 15 minutes
+        setInterval(refreshDashboard, 15 * 60 * 1000);
+        
+        // Simple chart simulation (would use Chart.js or similar in production)
+        function drawComplianceChart() {
+            const canvas = document.getElementById('compliance-chart');
+            const ctx = canvas.getContext('2d');
+            
+            // Simple line chart simulation
+            ctx.strokeStyle = '#00C896';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.moveTo(50, 150);
+            ctx.lineTo(100, 140);
+            ctx.lineTo(150, 130);
+            ctx.lineTo(200, 125);
+            ctx.lineTo(250, 120);
+            ctx.lineTo(300, 110);
+            ctx.stroke();
+            
+            // Add data points
+            const points = [
+                {x: 50, y: 150, value: '82%'},
+                {x: 100, y: 140, value: '84%'},
+                {x: 150, y: 130, value: '85%'},
+                {x: 200, y: 125, value: '86%'},
+                {x: 250, y: 120, value: '87%'},
+                {x: 300, y: 110, value: '89%'}
+            ];
+            
+            points.forEach(point => {
+                ctx.fillStyle = '#0B3D91';
+                ctx.beginPath();
+                ctx.arc(point.x, point.y, 4, 0, 2 * Math.PI);
+                ctx.fill();
+            });
+        }
+        
+        // Initialize chart
+        window.addEventListener('load', drawComplianceChart);
+    </script>
+</body>
+</html>

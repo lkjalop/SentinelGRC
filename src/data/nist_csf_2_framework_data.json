@@ -1,0 +1,89 @@
+{
+  "framework_info": {
+    "name": "NIST Cybersecurity Framework 2.0",
+    "version": "2.0",
+    "release_date": "2024-02-26",
+    "last_updated": "2025-08-13T12:39:46.972852+00:00",
+    "source": "NIST.gov",
+    "authority": "National Institute of Standards and Technology"
+  },
+  "functions": {
+    "GV": {
+      "name": "Govern",
+      "description": "The organization's cybersecurity governance and management strategy",
+      "categories": {
+        "GV.OC": "Organizational Context",
+        "GV.RM": "Risk Management Strategy",
+        "GV.RR": "Roles, Responsibilities, and Authorities",
+        "GV.PO": "Policy",
+        "GV.OV": "Oversight",
+        "GV.SC": "Cybersecurity Supply Chain Risk Management"
+      }
+    },
+    "ID": {
+      "name": "Identify",
+      "description": "Understanding cybersecurity risk to systems, people, assets, data, and capabilities",
+      "categories": {
+        "ID.AM": "Asset Management",
+        "ID.RA": "Risk Assessment",
+        "ID.IM": "Improvement"
+      }
+    },
+    "PR": {
+      "name": "Protect",
+      "description": "Safeguards to ensure delivery of critical infrastructure services",
+      "categories": {
+        "PR.AA": "Identity Management, Authentication and Access Control",
+        "PR.AT": "Awareness and Training",
+        "PR.DS": "Data Security",
+        "PR.IP": "Information Protection Processes and Procedures",
+        "PR.MA": "Maintenance",
+        "PR.PT": "Protective Technology"
+      }
+    },
+    "DE": {
+      "name": "Detect",
+      "description": "Appropriate activities to identify cybersecurity events",
+      "categories": {
+        "DE.AE": "Anomalies and Events",
+        "DE.CM": "Security Continuous Monitoring"
+      }
+    },
+    "RS": {
+      "name": "Respond",
+      "description": "Appropriate activities to take action regarding detected cybersecurity incidents",
+      "categories": {
+        "RS.MA": "Management",
+        "RS.AN": "Analysis",
+        "RS.MI": "Mitigation",
+        "RS.RP": "Reporting"
+      }
+    },
+    "RC": {
+      "name": "Recover",
+      "description": "Activities to maintain plans for resilience and restore capabilities",
+      "categories": {
+        "RC.RP": "Recovery Planning",
+        "RC.IM": "Improvements",
+        "RC.CO": "Communications"
+      }
+    }
+  },
+  "subcategories": {
+    "GV.OC": [
+      "GV.OC-01: The organizational mission is understood and informs cybersecurity risk management",
+      "GV.OC-02: Internal and external stakeholders are understood",
+      "GV.OC-03: Legal, regulatory, and contractual requirements are understood"
+    ],
+    "ID.AM": [
+      "ID.AM-01: Inventories of hardware managed by the organization are maintained",
+      "ID.AM-02: Inventories of software, services, and systems managed by the organization are maintained",
+      "ID.AM-03: Representations of the organization's authorized network are maintained"
+    ],
+    "PR.AA": [
+      "PR.AA-01: Identities and credentials for authorized users are managed",
+      "PR.AA-02: Identities and credentials for authorized software and hardware are managed",
+      "PR.AA-03: Identity management and credential management systems are protected"
+    ]
+  }
+}

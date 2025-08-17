@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sentinel GRC - Assessment Forms</title>
+  <link rel="stylesheet" href="/css/sentinel.css">
+  <link rel="stylesheet" href="/css/forms.css">
+</head>
+<body>
+  <div class="assessment-container">
+    <!-- Header -->
+    <header class="assessment-header">
+      <h1>📋 Compliance Assessment</h1>
+      <p>Complete this questionnaire to generate your compliance report</p>
+      <a href="/" class="back-link">← Back to Gateway</a>
+    </header>
+
+    <!-- Progress Indicator -->
+    <div class="progress-container">
+      <div class="progress-bar">
+        <div class="progress-fill" id="progress-fill"></div>
+      </div>
+      <div class="progress-text">
+        Step <span id="current-step">1</span> of <span id="total-steps">4</span>
+      </div>
+    </div>
+
+    <!-- Multi-Step Form -->
+    <form id="assessment-form" class="assessment-form">
+      
+      <!-- Step 1: Company Information -->
+      <div class="form-step active" data-step="1">
+        <h2>🏢 Company Information</h2>
+        
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="company-name">Company Name *</label>
+            <input type="text" id="company-name" name="companyName" required
+                   placeholder="e.g., HealthTech Solutions Pty Ltd">
+          </div>
+
+          <div class="form-group">
+            <label for="industry">Industry *</label>
+            <select id="industry" name="industry" required onchange="handleIndustryChange(this.value)">
+              <option value="">Select Industry</option>
+              <option value="healthcare">Healthcare</option>
+              <option value="finance">Finance</option>
+              <option value="banking">Banking</option>
+              <option value="insurance">Insurance</option>
+              <option value="technology">Technology</option>
+              <option value="education">Education</option>
+              <option value="government">Government</option>
+              <option value="energy">Energy</option>
+              <option value="telecommunications">Telecommunications</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="employee-count">Number of Employees *</label>
+            <input type="number" id="employee-count" name="employeeCount" required
+                   min="1" max="50000" value="50" onchange="handleEmployeeCountChange(this.value)">
+          </div>
+
+          <div class="form-group">
+            <label for="annual-revenue">Annual Revenue (USD)</label>
+            <input type="number" id="annual-revenue" name="annualRevenue"
+                   min="0" step="100000" placeholder="Optional">
+          </div>
+
+          <div class="form-group">
+            <label for="country">Country</label>
+            <select id="country" name="country" onchange="handleCountryChange(this.value)">
+              <option value="australia">Australia</option>
+              <option value="united_states">United States</option>
+              <option value="european_union">European Union</option>
+              <option value="united_kingdom">United Kingdom</option>
+              <option value="canada">Canada</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+
+          <!-- Industry-specific fields (dynamically shown) -->
+          <div id="healthcare-fields" class="industry-fields" style="display: none;">
+            <div class="form-group">
+              <label>
+                <input type="checkbox" name="hipaaCompliant"> HIPAA Compliant?
+              </label>
+            </div>
+            <div class="form-group">
+              <label>
+                <input type="checkbox" name="handlesPatientData"> Handles Patient Data?
+              </label>
+            </div>
+          </div>
+
+          <div id="finance-fields" class="industry-fields" style="display: none;">
+            <div class="form-group">
+              <label>
+                <input type="checkbox" name="sox_required"> SOX Compliance Required?
+              </label>
+            </div>
+            <div class="form-group">
+              <label>
+                <input type="checkbox" name="pci_required"> PCI DSS Required?
+              </label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>
+              <input type="checkbox" name="hasGovernmentContracts"> Has Government Contracts
+            </label>
+          </div>
+        </div>
+
+        <button type="button" class="btn-next" onclick="nextStep()">Next Step →</button>
+      </div>
+
+      <!-- Step 2: Current Security Controls -->
+      <div class="form-step" data-step="2">
+        <h2>🔐 Current Security Controls</h2>
+        <p>Select the security controls your organization currently has in place:</p>
+        
+        <div class="controls-grid">
+          <!-- Essential 8 Controls -->
+          <div class="control-category">
+            <h3>Essential 8 Controls</h3>
+            <div class="control-options">
+              <label class="control-option">
+                <input type="checkbox" name="currentControls" value="application_control">
+                <span class="checkmark"></span>
+                <div class="control-info">
+                  <strong>Application Control</strong>
+                  <p>Prevent execution of unapproved/malicious programs</p>
+                </div>
+              </label>
+
+              <label class="control-option">
+                <input type="checkbox" name="currentControls" value="patch_applications">
+                <span class="checkmark"></span>
+                <div class="control-info">
+                  <strong>Patch Applications</strong>
+                  <p>Update applications with security patches</p>
+                </div>
+              </label>
+
+              <label class="control-option">
+                <input type="checkbox" name="currentControls" value="mfa">
+                <span class="checkmark"></span>
+                <div class="control-info">
+                  <strong>Multi-Factor Authentication</strong>
+                  <p>Require multiple forms of authentication</p>
+                </div>
+              </label>
+
+              <label class="control-option">
+                <input type="checkbox" name="currentControls" value="regular_backups">
+                <span class="checkmark"></span>
+                <div class="control-info">
+                  <strong>Regular Backups</strong>
+                  <p>Backup important data regularly</p>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <!-- Additional Controls -->
+          <div class="control-category">
+            <h3>Additional Controls</h3>
+            <div class="control-options">
+              <label class="control-option">
+                <input type="checkbox" name="currentControls" value="network_segmentation">
+                <span class="checkmark"></span>
+                <div class="control-info">
+                  <strong>Network Segmentation</strong>
+                  <p>Isolate critical systems and networks</p>
+                </div>
+              </label>
+
+              <label class="control-option">
+                <input type="checkbox" name="currentControls" value="monitoring_logging">
+                <span class="checkmark"></span>
+                <div class="control-info">
+                  <strong>Monitoring & Logging</strong>
+                  <p>Monitor and log security events</p>
+                </div>
+              </label>
+
+              <label class="control-option">
+                <input type="checkbox" name="currentControls" value="incident_response">
+                <span class="checkmark"></span>
+                <div class="control-info">
+                  <strong>Incident Response Plan</strong>
+                  <p>Documented incident response procedures</p>
+                </div>
+              </label>
+
+              <label class="control-option">
+                <input type="checkbox" name="currentControls" value="security_training">
+                <span class="checkmark"></span>
+                <div class="control-info">
+                  <strong>Security Awareness Training</strong>
+                  <p>Regular staff security training</p>
+                </div>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-navigation">
+          <button type="button" class="btn-back" onclick="prevStep()">← Previous</button>
+          <button type="button" class="btn-next" onclick="nextStep()">Next Step →</button>
+        </div>
+      </div>
+
+      <!-- Step 3: Risk Assessment -->
+      <div class="form-step" data-step="3">
+        <h2>⚠️ Risk Profile & Incidents</h2>
+        
+        <div class="form-group">
+          <label for="previous-incidents">Previous Security Incidents (Optional)</label>
+          <textarea id="previous-incidents" name="previousIncidents" rows="4"
+                    placeholder="Describe any security incidents, data breaches, or compliance violations..."></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="risk-tolerance">Risk Tolerance</label>
+          <select id="risk-tolerance" name="riskTolerance">
+            <option value="low">Low - Minimal acceptable risk</option>
+            <option value="medium" selected>Medium - Balanced risk approach</option>
+            <option value="high">High - Accept higher risks for agility</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="compliance-timeline">Desired Compliance Timeline</label>
+          <select id="compliance-timeline" name="complianceTimeline">
+            <option value="immediate">Immediate (0-3 months)</option>
+            <option value="short" selected>Short-term (3-6 months)</option>
+            <option value="medium">Medium-term (6-12 months)</option>
+            <option value="long">Long-term (12+ months)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Data Sensitivity (check all that apply)</label>
+          <div class="checkbox-group">
+            <label><input type="checkbox" name="dataSensitivity" value="pii"> Personal Identifiable Information (PII)</label>
+            <label><input type="checkbox" name="dataSensitivity" value="phi"> Protected Health Information (PHI)</label>
+            <label><input type="checkbox" name="dataSensitivity" value="financial"> Financial Data</label>
+            <label><input type="checkbox" name="dataSensitivity" value="government"> Government/Classified Data</label>
+            <label><input type="checkbox" name="dataSensitivity" value="ip"> Intellectual Property</label>
+          </div>
+        </div>
+
+        <div class="form-navigation">
+          <button type="button" class="btn-back" onclick="prevStep()">← Previous</button>
+          <button type="button" class="btn-next" onclick="nextStep()">Next Step →</button>
+        </div>
+      </div>
+
+      <!-- Step 4: Assessment Options & File Upload -->
+      <div class="form-step" data-step="4">
+        <h2>🎯 Assessment Options & Document Upload</h2>
+        
+        <div class="form-group">
+          <label>Assessment Frameworks</label>
+          <p>Based on your industry and location, we recommend:</p>
+          <div id="recommended-frameworks" class="framework-recommendations">
+            <!-- Dynamically populated based on previous answers -->
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Assessment Options</label>
+          <div class="checkbox-group">
+            <label><input type="checkbox" name="enableSidecars" checked> Enable Background Analysis (Legal & Threat Modeling)</label>
+            <label><input type="checkbox" name="enableAI" checked> Enable AI-Enhanced Analysis</label>
+            <label><input type="checkbox" name="enableExpertReview"> Request Human Expert Review (&lt;70% AI confidence)</label>
+            <label><input type="checkbox" name="generatePDF" checked> Generate Professional PDF Report</label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="document-upload">Upload Supporting Documents (Optional)</label>
+          <div class="file-upload-area" id="file-upload-area" onclick="document.getElementById('document-upload').click()">
+            <div class="upload-icon">📄</div>
+            <p>Click to upload or drag & drop files</p>
+            <p class="upload-hint">PDF, Word, Excel files accepted. Max 10MB per file.</p>
+            <input type="file" id="document-upload" name="documents" multiple 
+                   accept=".pdf,.doc,.docx,.xls,.xlsx,.txt" style="display: none;">
+          </div>
+          <div id="uploaded-files"></div>
+        </div>
+
+        <div class="assessment-preview">
+          <h3>Assessment Summary</h3>
+          <div id="assessment-summary">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+
+        <div class="form-navigation">
+          <button type="button" class="btn-back" onclick="prevStep()">← Previous</button>
+          <button type="submit" class="btn-submit" id="submit-assessment">
+            🔍 Start Assessment
+          </button>
+        </div>
+      </div>
+    </form>
+
+    <!-- Loading Overlay -->
+    <div id="assessment-loading" class="loading-overlay" style="display: none;">
+      <div class="loading-content">
+        <div class="loading-spinner"></div>
+        <h3>Running Compliance Assessment...</h3>
+        <p id="loading-status">Initializing assessment...</p>
+        <div class="assessment-steps">
+          <div class="step completed">✅ Company profile created</div>
+          <div class="step">🔄 Framework analysis</div>
+          <div class="step">🔍 Control gap analysis</div>
+          <div class="step">📊 Risk assessment</div>
+          <div class="step">📝 Report generation</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/assessment-forms.js"></script>
+</body>
+</html>

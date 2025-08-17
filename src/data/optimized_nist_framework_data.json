@@ -1,0 +1,126 @@
+{
+  "framework_info": {
+    "name": "NIST Cybersecurity Framework 2.0",
+    "version": "2.0",
+    "release_date": "2024-02-26",
+    "last_updated": "2025-08-13T13:05:45.077387+00:00",
+    "source": "NIST.gov",
+    "authority": "National Institute of Standards and Technology",
+    "checksum": "6cee3cd269629f29"
+  },
+  "functions": {
+    "GV": {
+      "name": "Govern",
+      "description": "The organization's cybersecurity governance and management strategy",
+      "categories": {
+        "GV.OC": "Organizational Context",
+        "GV.RM": "Risk Management Strategy",
+        "GV.RR": "Roles, Responsibilities, and Authorities",
+        "GV.PO": "Policy",
+        "GV.OV": "Oversight",
+        "GV.SC": "Cybersecurity Supply Chain Risk Management"
+      }
+    },
+    "ID": {
+      "name": "Identify",
+      "description": "Understanding cybersecurity risk to systems, people, assets, data, and capabilities",
+      "categories": {
+        "ID.AM": "Asset Management",
+        "ID.RA": "Risk Assessment",
+        "ID.IM": "Improvement"
+      }
+    },
+    "PR": {
+      "name": "Protect",
+      "description": "Safeguards to ensure delivery of critical infrastructure services",
+      "categories": {
+        "PR.AA": "Identity Management, Authentication and Access Control",
+        "PR.AT": "Awareness and Training",
+        "PR.DS": "Data Security",
+        "PR.IP": "Information Protection Processes and Procedures",
+        "PR.MA": "Maintenance",
+        "PR.PT": "Protective Technology"
+      }
+    },
+    "DE": {
+      "name": "Detect",
+      "description": "Appropriate activities to identify cybersecurity events",
+      "categories": {
+        "DE.AE": "Anomalies and Events",
+        "DE.CM": "Security Continuous Monitoring"
+      }
+    },
+    "RS": {
+      "name": "Respond",
+      "description": "Appropriate activities to take action regarding detected cybersecurity incidents",
+      "categories": {
+        "RS.MA": "Management",
+        "RS.AN": "Analysis",
+        "RS.MI": "Mitigation",
+        "RS.RP": "Reporting"
+      }
+    },
+    "RC": {
+      "name": "Recover",
+      "description": "Activities to maintain plans for resilience and restore capabilities",
+      "categories": {
+        "RC.RP": "Recovery Planning",
+        "RC.IM": "Improvements",
+        "RC.CO": "Communications"
+      }
+    }
+  },
+  "subcategories": {
+    "GV.OC": [
+      {
+        "id": "GV.OC-01",
+        "description": "The organizational mission is understood and informs cybersecurity risk management",
+        "implementation_guidance": "Document organizational mission and align cybersecurity strategy",
+        "evidence_artifacts": [
+          "Mission statement",
+          "Risk management policy"
+        ]
+      }
+    ],
+    "ID.AM": [
+      {
+        "id": "ID.AM-01",
+        "description": "Inventories of hardware managed by the organization are maintained",
+        "implementation_guidance": "Deploy automated asset discovery and maintain CMDB",
+        "evidence_artifacts": [
+          "Asset inventory",
+          "Discovery scan reports"
+        ]
+      },
+      {
+        "id": "ID.AM-02",
+        "description": "Inventories of software, services, and systems managed by the organization are maintained",
+        "implementation_guidance": "Implement software asset management with license tracking",
+        "evidence_artifacts": [
+          "Software inventory",
+          "License reports"
+        ]
+      }
+    ],
+    "PR.AA": [
+      {
+        "id": "PR.AA-01",
+        "description": "Identities and credentials for authorized users are managed",
+        "implementation_guidance": "Deploy identity governance with lifecycle management",
+        "evidence_artifacts": [
+          "User access reviews",
+          "Identity management logs"
+        ]
+      },
+      {
+        "id": "PR.AA-02",
+        "description": "Identities and credentials for authorized software and hardware are managed",
+        "implementation_guidance": "Implement certificate and service account management",
+        "evidence_artifacts": [
+          "Certificate inventory",
+          "Service account reviews"
+        ]
+      }
+    ]
+  }
+}

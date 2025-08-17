@@ -1,0 +1,66 @@
+name: 'Cerberus AI - Compliance Check'
+description: 'Automated compliance validation for CI/CD pipelines'
+author: 'Cerberus AI'
+branding:
+  icon: 'shield'
+  color: 'purple'
+
+inputs:
+  server-url:
+    description: 'Cerberus AI server URL'
+    required: true
+    default: 'https://api.cerberus-ai.com'
+  
+  api-key:
+    description: 'API key for authentication'
+    required: true
+  
+  frameworks:
+    description: 'Comma-separated list of frameworks to check (essential8,nistcsf,soc2,gdpr)'
+    required: false
+    default: 'essential8'
+  
+  severity-threshold:
+    description: 'Minimum severity level to fail the build (low,medium,high,critical)'
+    required: false
+    default: 'medium'
+  
+  mode:
+    description: 'Validation mode: validate, audit, or monitor'
+    required: false
+    default: 'validate'
+  
+  output-format:
+    description: 'Output format: json, sarif, or summary'
+    required: false
+    default: 'summary'
+  
+  fail-on-violations:
+    description: 'Whether to fail the build on compliance violations'
+    required: false
+    default: 'true'
+  
+  human-review-threshold:
+    description: 'Complexity level requiring human review (low,medium,high)'
+    required: false
+    default: 'high'
+
+outputs:
+  violations-found:
+    description: 'Number of compliance violations found'
+  
+  frameworks-checked:
+    description: 'List of frameworks that were checked'
+  
+  compliance-score:
+    description: 'Overall compliance score (0-100)'
+  
+  human-review-required:
+    description: 'Whether human review is required'
+  
+  report-url:
+    description: 'URL to detailed compliance report'
+
+runs:
+  using: 'node20'
+  main: 'dist/index.js'

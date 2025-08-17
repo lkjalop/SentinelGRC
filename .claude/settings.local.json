@@ -21,8 +21,24 @@
       "Bash(mv:*)",
       "Bash(gh api:*)",
       "Bash(git commit:*)",
-      "Bash(mkdir:*)"
+      "Bash(mkdir:*)",
+      "Bash(touch:*)",
+      "WebSearch",
+      "WebFetch(domain:www.nist.gov)",
+      "Bash(move CERBERUS_AI_BRAND_POSITIONING.md archiveanalysis_reports)",
+      "Bash(move COMPETITIVE_LANDSCAPE_ANALYSIS.md archiveanalysis_reports)",
+      "Bash(move GRC_market_assessment_text_markdown.md archiveanalysis_reports)",
+      "Bash(move STRATEGIC_ASSESSMENT_REPORT.md archiveanalysis_reports)",
+      "WebFetch(domain:claude.ai)",
+      "Bash(find:*)",
+      "Bash(grep:*)",
+      "Bash(cp:*)",
+      "Bash(powershell:*)",
+      "Bash(move:*)",
+      "Bash(dir:*)",
+      "Bash(del nul)"
     ],
-    "deny": []
+    "deny": [],
+    "defaultMode": "acceptEdits"
   }
 }

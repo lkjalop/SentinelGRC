@@ -1,0 +1,27 @@
+{
+  "dashboard_title": "Framework Harmonization ROI Dashboard",
+  "generated_at": "2025-08-13T12:46:00.766592+00:00",
+  "key_metrics": {
+    "frameworks_analyzed": 2,
+    "control_overlaps_identified": 13,
+    "potential_cost_savings": "$150K-$400K annually",
+    "implementation_efficiency": "40-45% improvement",
+    "compliance_acceleration": "8-10 months faster"
+  },
+  "risk_reduction": {
+    "coverage_gaps_eliminated": 8,
+    "redundant_controls_optimized": 5,
+    "audit_preparation_streamlined": true
+  },
+  "strategic_recommendations": [
+    "Prioritize MFA implementation for dual-framework compliance",
+    "Establish unified asset management as foundation control",
+    "Deploy integrated monitoring for detection capabilities"
+  ],
+  "next_steps": [
+    "Conduct detailed gap analysis",
+    "Develop harmonized implementation roadmap",
+    "Establish unified governance structure",
+    "Begin with highest-ROI controls"
+  ]
+}

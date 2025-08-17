@@ -1,0 +1,54 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form">
+
+  <f:section title="🔱 Cerberus AI Configuration">
+    
+    <f:entry title="Server URL" field="serverUrl" description="Cerberus AI server endpoint (e.g., https://api.cerberus-ai.com)">
+      <f:textbox />
+    </f:entry>
+    
+    <f:entry title="Credentials" field="credentialsId" description="API credentials for Cerberus AI authentication">
+      <c:select />
+    </f:entry>
+    
+    <f:validateButton title="Test Connection" progress="Testing..." method="testConnection" with="serverUrl,credentialsId" />
+    
+  </f:section>
+
+  <f:section title="📊 Compliance Settings">
+    
+    <f:entry title="Frameworks" field="frameworks" description="Compliance frameworks to validate (comma-separated)">
+      <f:select />
+    </f:entry>
+    
+    <f:entry title="Validation Mode" field="mode" description="Type of compliance validation to perform">
+      <f:select />
+    </f:entry>
+    
+    <f:entry title="Severity Threshold" field="severityThreshold" description="Minimum severity level to fail the build">
+      <f:select />
+    </f:entry>
+    
+    <f:entry title="Human Review Threshold" field="humanReviewThreshold" description="Complexity level requiring human review">
+      <f:select />
+    </f:entry>
+    
+  </f:section>
+
+  <f:section title="📋 Output Settings">
+    
+    <f:entry title="Output Format" field="outputFormat" description="Format for compliance reports">
+      <f:select />
+    </f:entry>
+    
+    <f:entry title="Fail on Violations" field="failOnViolations" description="Fail the build when compliance violations are found">
+      <f:checkbox />
+    </f:entry>
+    
+    <f:entry title="Publish Results" field="publishResults" description="Save compliance reports to workspace">
+      <f:checkbox />
+    </f:entry>
+    
+  </f:section>
+
+</j:jelly>

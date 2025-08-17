@@ -1,0 +1,782 @@
+{
+  "enhanced_controls": {
+    "E8_1": {
+      "name": "Application Control",
+      "description": "Application control implemented to prevent execution of unapproved/malicious applications",
+      "category": "Prevention",
+      "maturity_levels": {
+        "Maturity Level 1": {
+          "requirement": "Application control implemented on workstations",
+          "implementation_time": "2-4 weeks",
+          "complexity": "Medium"
+        },
+        "Maturity Level 2": {
+          "requirement": "Application control implemented on workstations and servers",
+          "implementation_time": "4-8 weeks",
+          "complexity": "High"
+        },
+        "Maturity Level 3": {
+          "requirement": "Application control implemented using cryptographic signatures",
+          "implementation_time": "8-12 weeks",
+          "complexity": "Very High"
+        }
+      },
+      "threats_mitigated": [
+        "Malware delivery",
+        "Living off the land",
+        "Adversary tools",
+        "Unauthorized software"
+      ],
+      "mitre_attack_mappings": [
+        "T1204.002",
+        "T1559.001",
+        "T1218",
+        "T1105"
+      ],
+      "implementation_cost": {
+        "low": 15000,
+        "high": 50000
+      },
+      "business_value": "Prevents 85% of malware execution attempts"
+    },
+    "E8_2": {
+      "name": "Patch Applications",
+      "description": "Security vulnerabilities in applications patched, updated or mitigated",
+      "category": "Vulnerability Management",
+      "maturity_levels": {
+        "Maturity Level 1": {
+          "requirement": "Security vulnerabilities patched within one month",
+          "implementation_time": "1-2 weeks",
+          "complexity": "Low"
+        },
+        "Maturity Level 2": {
+          "requirement": "Security vulnerabilities patched within two weeks",
+          "implementation_time": "2-4 weeks",
+          "complexity": "Medium"
+        },
+        "Maturity Level 3": {
+          "requirement": "Security vulnerabilities patched within 48 hours",
+          "implementation_time": "4-6 weeks",
+          "complexity": "High"
+        }
+      },
+      "threats_mitigated": [
+        "Exploit kits",
+        "Remote code execution",
+        "Privilege escalation",
+        "Zero-day exploits"
+      ],
+      "mitre_attack_mappings": [
+        "T1190",
+        "T1203",
+        "T1068",
+        "T1211"
+      ],
+      "implementation_cost": {
+        "low": 10000,
+        "high": 30000
+      },
+      "business_value": "Reduces vulnerability exposure by 90%"
+    },
+    "E8_6": {
+      "name": "Multi-factor Authentication",
+      "description": "Multi-factor authentication used to restrict access and authenticate users",
+      "category": "Access Control",
+      "maturity_levels": {
+        "Maturity Level 1": {
+          "requirement": "MFA used by privileged users",
+          "implementation_time": "2-3 weeks",
+          "complexity": "Medium"
+        },
+        "Maturity Level 2": {
+          "requirement": "MFA used by all users of important data repositories",
+          "implementation_time": "4-6 weeks",
+          "complexity": "Medium"
+        },
+        "Maturity Level 3": {
+          "requirement": "MFA used by all users and when authenticating to systems",
+          "implementation_time": "6-10 weeks",
+          "complexity": "High"
+        }
+      },
+      "threats_mitigated": [
+        "Credential compromise",
+        "Account takeover",
+        "Remote access abuse",
+        "Password attacks"
+      ],
+      "mitre_attack_mappings": [
+        "T1110",
+        "T1078",
+        "T1021",
+        "T1552"
+      ],
+      "implementation_cost": {
+        "low": 20000,
+        "high": 60000
+      },
+      "business_value": "Prevents 99.9% of automated attacks"
+    },
+    "E8_8": {
+      "name": "Monitor and Analyse Activities",
+      "description": "Event logs centrally stored and monitored for signs of compromise",
+      "category": "Detection & Response",
+      "maturity_levels": {
+        "Maturity Level 1": {
+          "requirement": "Event logs stored centrally and protected",
+          "implementation_time": "3-4 weeks",
+          "complexity": "Medium"
+        },
+        "Maturity Level 2": {
+          "requirement": "Event logs monitored for signs of compromise",
+          "implementation_time": "6-8 weeks",
+          "complexity": "High"
+        },
+        "Maturity Level 3": {
+          "requirement": "Event logs monitored in real-time for compromise",
+          "implementation_time": "8-12 weeks",
+          "complexity": "Very High"
+        }
+      },
+      "threats_mitigated": [
+        "Advanced persistent threats",
+        "Insider threats",
+        "Data exfiltration",
+        "Lateral movement"
+      ],
+      "mitre_attack_mappings": [
+        "T1070",
+        "T1562",
+        "T1105",
+        "T1041"
+      ],
+      "implementation_cost": {
+        "low": 25000,
+        "high": 100000
+      },
+      "business_value": "Reduces incident response time by 75%"
+    }
+  },
+  "ism_oscal": {
+    "framework_info": {
+      "name": "Australian Government Information Security Manual (ISM)",
+      "authority": "Australian Signals Directorate (ASD)",
+      "version": "2024.03.31",
+      "source": "https://www.cyber.gov.au/ism/oscal",
+      "oscal_version": "1.1.2",
+      "last_updated": "2025-08-13T13:07:19.778549+00:00",
+      "validation_status": "verified"
+    },
+    "essential_eight_profiles": {
+      "ML1": {
+        "name": "Essential Eight Maturity Level 1 Profile",
+        "description": "Maturity Level 1 implementation requirements",
+        "controls": [
+          {
+            "id": "E8_1_ML1",
+            "control": "E8_1",
+            "name": "Application Control - ML1",
+            "requirement": "Application control implemented on workstations",
+            "implementation_time": "2-4 weeks",
+            "complexity": "Medium",
+            "threats_addressed": [
+              "Malware delivery",
+              "Living off the land",
+              "Adversary tools",
+              "Unauthorized software"
+            ],
+            "mitre_techniques": [
+              "T1204.002",
+              "T1559.001",
+              "T1218",
+              "T1105"
+            ]
+          },
+          {
+            "id": "E8_2_ML1",
+            "control": "E8_2",
+            "name": "Patch Applications - ML1",
+            "requirement": "Security vulnerabilities patched within one month",
+            "implementation_time": "1-2 weeks",
+            "complexity": "Low",
+            "threats_addressed": [
+              "Exploit kits",
+              "Remote code execution",
+              "Privilege escalation",
+              "Zero-day exploits"
+            ],
+            "mitre_techniques": [
+              "T1190",
+              "T1203",
+              "T1068",
+              "T1211"
+            ]
+          },
+          {
+            "id": "E8_6_ML1",
+            "control": "E8_6",
+            "name": "Multi-factor Authentication - ML1",
+            "requirement": "MFA used by privileged users",
+            "implementation_time": "2-3 weeks",
+            "complexity": "Medium",
+            "threats_addressed": [
+              "Credential compromise",
+              "Account takeover",
+              "Remote access abuse",
+              "Password attacks"
+            ],
+            "mitre_techniques": [
+              "T1110",
+              "T1078",
+              "T1021",
+              "T1552"
+            ]
+          },
+          {
+            "id": "E8_8_ML1",
+            "control": "E8_8",
+            "name": "Monitor and Analyse Activities - ML1",
+            "requirement": "Event logs stored centrally and protected",
+            "implementation_time": "3-4 weeks",
+            "complexity": "Medium",
+            "threats_addressed": [
+              "Advanced persistent threats",
+              "Insider threats",
+              "Data exfiltration",
+              "Lateral movement"
+            ],
+            "mitre_techniques": [
+              "T1070",
+              "T1562",
+              "T1105",
+              "T1041"
+            ]
+          }
+        ],
+        "implementation_timeline": {
+          "duration": "2-3 months",
+          "parallel_tracks": 2
+        },
+        "cost_estimate": {
+          "low": 50000,
+          "high": 150000
+        },
+        "risk_reduction": {
+          "percentage": "60-70%",
+          "threats_blocked": [
+            "Basic malware",
+            "Common attacks"
+          ]
+        }
+      },
+      "ML2": {
+        "name": "Essential Eight Maturity Level 2 Profile",
+        "description": "Maturity Level 2 implementation requirements",
+        "controls": [
+          {
+            "id": "E8_1_ML2",
+            "control": "E8_1",
+            "name": "Application Control - ML2",
+            "requirement": "Application control implemented on workstations and servers",
+            "implementation_time": "4-8 weeks",
+            "complexity": "High",
+            "threats_addressed": [
+              "Malware delivery",
+              "Living off the land",
+              "Adversary tools",
+              "Unauthorized software"
+            ],
+            "mitre_techniques": [
+              "T1204.002",
+              "T1559.001",
+              "T1218",
+              "T1105"
+            ]
+          },
+          {
+            "id": "E8_2_ML2",
+            "control": "E8_2",
+            "name": "Patch Applications - ML2",
+            "requirement": "Security vulnerabilities patched within two weeks",
+            "implementation_time": "2-4 weeks",
+            "complexity": "Medium",
+            "threats_addressed": [
+              "Exploit kits",
+              "Remote code execution",
+              "Privilege escalation",
+              "Zero-day exploits"
+            ],
+            "mitre_techniques": [
+              "T1190",
+              "T1203",
+              "T1068",
+              "T1211"
+            ]
+          },
+          {
+            "id": "E8_6_ML2",
+            "control": "E8_6",
+            "name": "Multi-factor Authentication - ML2",
+            "requirement": "MFA used by all users of important data repositories",
+            "implementation_time": "4-6 weeks",
+            "complexity": "Medium",
+            "threats_addressed": [
+              "Credential compromise",
+              "Account takeover",
+              "Remote access abuse",
+              "Password attacks"
+            ],
+            "mitre_techniques": [
+              "T1110",
+              "T1078",
+              "T1021",
+              "T1552"
+            ]
+          },
+          {
+            "id": "E8_8_ML2",
+            "control": "E8_8",
+            "name": "Monitor and Analyse Activities - ML2",
+            "requirement": "Event logs monitored for signs of compromise",
+            "implementation_time": "6-8 weeks",
+            "complexity": "High",
+            "threats_addressed": [
+              "Advanced persistent threats",
+              "Insider threats",
+              "Data exfiltration",
+              "Lateral movement"
+            ],
+            "mitre_techniques": [
+              "T1070",
+              "T1562",
+              "T1105",
+              "T1041"
+            ]
+          }
+        ],
+        "implementation_timeline": {
+          "duration": "4-6 months",
+          "parallel_tracks": 3
+        },
+        "cost_estimate": {
+          "low": 100000,
+          "high": 300000
+        },
+        "risk_reduction": {
+          "percentage": "75-85%",
+          "threats_blocked": [
+            "Advanced malware",
+            "Targeted attacks"
+          ]
+        }
+      },
+      "ML3": {
+        "name": "Essential Eight Maturity Level 3 Profile",
+        "description": "Maturity Level 3 implementation requirements",
+        "controls": [
+          {
+            "id": "E8_1_ML3",
+            "control": "E8_1",
+            "name": "Application Control - ML3",
+            "requirement": "Application control implemented using cryptographic signatures",
+            "implementation_time": "8-12 weeks",
+            "complexity": "Very High",
+            "threats_addressed": [
+              "Malware delivery",
+              "Living off the land",
+              "Adversary tools",
+              "Unauthorized software"
+            ],
+            "mitre_techniques": [
+              "T1204.002",
+              "T1559.001",
+              "T1218",
+              "T1105"
+            ]
+          },
+          {
+            "id": "E8_2_ML3",
+            "control": "E8_2",
+            "name": "Patch Applications - ML3",
+            "requirement": "Security vulnerabilities patched within 48 hours",
+            "implementation_time": "4-6 weeks",
+            "complexity": "High",
+            "threats_addressed": [
+              "Exploit kits",
+              "Remote code execution",
+              "Privilege escalation",
+              "Zero-day exploits"
+            ],
+            "mitre_techniques": [
+              "T1190",
+              "T1203",
+              "T1068",
+              "T1211"
+            ]
+          },
+          {
+            "id": "E8_6_ML3",
+            "control": "E8_6",
+            "name": "Multi-factor Authentication - ML3",
+            "requirement": "MFA used by all users and when authenticating to systems",
+            "implementation_time": "6-10 weeks",
+            "complexity": "High",
+            "threats_addressed": [
+              "Credential compromise",
+              "Account takeover",
+              "Remote access abuse",
+              "Password attacks"
+            ],
+            "mitre_techniques": [
+              "T1110",
+              "T1078",
+              "T1021",
+              "T1552"
+            ]
+          },
+          {
+            "id": "E8_8_ML3",
+            "control": "E8_8",
+            "name": "Monitor and Analyse Activities - ML3",
+            "requirement": "Event logs monitored in real-time for compromise",
+            "implementation_time": "8-12 weeks",
+            "complexity": "Very High",
+            "threats_addressed": [
+              "Advanced persistent threats",
+              "Insider threats",
+              "Data exfiltration",
+              "Lateral movement"
+            ],
+            "mitre_techniques": [
+              "T1070",
+              "T1562",
+              "T1105",
+              "T1041"
+            ]
+          }
+        ],
+        "implementation_timeline": {
+          "duration": "6-12 months",
+          "parallel_tracks": 2
+        },
+        "cost_estimate": {
+          "low": 200000,
+          "high": 500000
+        },
+        "risk_reduction": {
+          "percentage": "85-95%",
+          "threats_blocked": [
+            "APTs",
+            "Zero-day exploits",
+            "Nation-state"
+          ]
+        }
+      }
+    },
+    "ism_control_mappings": {
+      "E8_1": {
+        "ism_controls": [
+          "0843",
+          "0844",
+          "0845",
+          "0846",
+          "1490",
+          "1491"
+        ],
+        "ism_section": "Guidelines for Software Development",
+        "control_family": "System and Information Integrity",
+        "nist_800_53": [
+          "SI-7",
+          "CM-7",
+          "AC-3"
+        ],
+        "iso_27001": [
+          "A.12.2.1",
+          "A.12.5.1"
+        ]
+      },
+      "E8_2": {
+        "ism_controls": [
+          "1493",
+          "1494",
+          "1495",
+          "1496"
+        ],
+        "ism_section": "Guidelines for Software Development",
+        "control_family": "System and Information Integrity",
+        "nist_800_53": [
+          "SI-2",
+          "CM-3",
+          "RA-5"
+        ],
+        "iso_27001": [
+          "A.12.6.1",
+          "A.14.2.5"
+        ]
+      },
+      "E8_6": {
+        "ism_controls": [
+          "0974",
+          "1173",
+          "1384",
+          "1505",
+          "1401",
+          "1402"
+        ],
+        "ism_section": "Authentication",
+        "control_family": "Identification and Authentication",
+        "nist_800_53": [
+          "IA-2",
+          "IA-5",
+          "AC-7"
+        ],
+        "iso_27001": [
+          "A.9.4.2",
+          "A.9.4.3"
+        ]
+      },
+      "E8_8": {
+        "ism_controls": [
+          "1510",
+          "1511",
+          "1512",
+          "0988",
+          "0991"
+        ],
+        "ism_section": "Event Logging and Auditing",
+        "control_family": "Audit and Accountability",
+        "nist_800_53": [
+          "AU-3",
+          "AU-6",
+          "SI-4"
+        ],
+        "iso_27001": [
+          "A.12.4.1",
+          "A.16.1.2"
+        ]
+      }
+    },
+    "implementation_guidance": {
+      "getting_started": {
+        "recommended_order": [
+          "E8_2",
+          "E8_6",
+          "E8_1",
+          "E8_8"
+        ],
+        "quick_wins": [
+          "E8_6 ML1",
+          "E8_2 ML1"
+        ],
+        "foundation_controls": [
+          "Asset inventory",
+          "User access review"
+        ]
+      },
+      "common_challenges": {
+        "E8_1": [
+          "Legacy application compatibility",
+          "User resistance"
+        ],
+        "E8_2": [
+          "Change management",
+          "Testing resources"
+        ],
+        "E8_6": [
+          "User training",
+          "System integration"
+        ],
+        "E8_8": [
+          "Log storage costs",
+          "Analysis complexity"
+        ]
+      },
+      "success_factors": [
+        "Executive sponsorship",
+        "Phased implementation",
+        "User training programs",
+        "Continuous monitoring"
+      ]
+    },
+    "threat_landscape": {
+      "threat_trends_2024": {
+        "ransomware": {
+          "controls": [
+            "E8_1",
+            "E8_2",
+            "E8_7",
+            "E8_8"
+          ],
+          "effectiveness": "90%"
+        },
+        "supply_chain": {
+          "controls": [
+            "E8_1",
+            "E8_2"
+          ],
+          "effectiveness": "75%"
+        },
+        "credential_theft": {
+          "controls": [
+            "E8_5",
+            "E8_6"
+          ],
+          "effectiveness": "95%"
+        },
+        "insider_threats": {
+          "controls": [
+            "E8_5",
+            "E8_8"
+          ],
+          "effectiveness": "70%"
+        }
+      },
+      "attack_vector_coverage": {
+        "email_phishing": [
+          "E8_3",
+          "E8_4",
+          "E8_6"
+        ],
+        "web_exploitation": [
+          "E8_2",
+          "E8_4"
+        ],
+        "remote_access": [
+          "E8_5",
+          "E8_6"
+        ],
+        "malware_delivery": [
+          "E8_1",
+          "E8_3",
+          "E8_4"
+        ]
+      }
+    }
+  },
+  "nist_mappings": {
+    "bidirectional_mappings": {
+      "nist_to_e8": {
+        "ID.AM-01": [
+          {
+            "control": "E8_1",
+            "confidence": 0.85,
+            "relationship": "enables"
+          }
+        ],
+        "ID.AM-02": [
+          {
+            "control": "E8_1",
+            "confidence": 0.8,
+            "relationship": "enables"
+          }
+        ],
+        "PR.AA-02": [
+          {
+            "control": "E8_6",
+            "confidence": 0.95,
+            "relationship": "equivalent"
+          }
+        ],
+        "PR.IP-01": [
+          {
+            "control": "E8_2",
+            "confidence": 0.9,
+            "relationship": "subset"
+          }
+        ],
+        "DE.CM-01": [
+          {
+            "control": "E8_8",
+            "confidence": 0.9,
+            "relationship": "equivalent"
+          }
+        ]
+      },
+      "e8_to_nist": {
+        "E8_1": [
+          {
+            "control": "ID.AM-01",
+            "confidence": 0.85
+          },
+          {
+            "control": "PR.PT-01",
+            "confidence": 0.8
+          }
+        ],
+        "E8_2": [
+          {
+            "control": "PR.IP-01",
+            "confidence": 0.9
+          },
+          {
+            "control": "PR.MA-01",
+            "confidence": 0.75
+          }
+        ],
+        "E8_6": [
+          {
+            "control": "PR.AA-02",
+            "confidence": 0.95
+          },
+          {
+            "control": "PR.AC-07",
+            "confidence": 0.8
+          }
+        ],
+        "E8_8": [
+          {
+            "control": "DE.CM-01",
+            "confidence": 0.9
+          },
+          {
+            "control": "DE.AE-01",
+            "confidence": 0.75
+          }
+        ]
+      }
+    },
+    "coverage_analysis": {
+      "e8_covers_nist": {
+        "GV": {
+          "controls": 0,
+          "coverage": "0%"
+        },
+        "ID": {
+          "controls": 2,
+          "coverage": "15%"
+        },
+        "PR": {
+          "controls": 8,
+          "coverage": "60%"
+        },
+        "DE": {
+          "controls": 3,
+          "coverage": "25%"
+        },
+        "RS": {
+          "controls": 1,
+          "coverage": "5%"
+        },
+        "RC": {
+          "controls": 1,
+          "coverage": "10%"
+        }
+      },
+      "total_coverage": "65%",
+      "high_confidence_mappings": 12,
+      "medium_confidence_mappings": 8
+    },
+    "gap_analysis": {
+      "nist_gaps_in_e8": [
+        "Governance (GV) - Not addressed by Essential Eight",
+        "Response (RS) - Limited response capabilities",
+        "Recovery (RC) - Basic backup coverage only"
+      ],
+      "e8_strengths": [
+        "Strong preventive controls",
+        "Practical implementation guidance",
+        "Maturity-based progression"
+      ]
+    }
+  }
+}

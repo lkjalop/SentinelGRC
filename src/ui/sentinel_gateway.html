@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sentinel GRC - Unified Intelligence Platform</title>
+  <link rel="stylesheet" href="css/sentinel.css">
+  <link rel="preconnect" href="https://rsms.me">
+  <link href="https://rsms.me/inter/inter.css" rel="stylesheet">
+</head>
+<body>
+  <!-- Unified Gateway Landing -->
+  <div id="sentinel-gateway" class="gateway-container">
+    <!-- Adaptive Header -->
+    <header class="gateway-header">
+      <div class="header-content">
+        <h1 class="brand">
+          <svg class="brand-logo" width="32" height="32" viewBox="0 0 32 32">
+            <defs>
+              <linearGradient id="logo-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#0B3D91;stop-opacity:1" />
+                <stop offset="100%" style="stop-color:#00C896;stop-opacity:1" />
+              </linearGradient>
+            </defs>
+            <circle cx="16" cy="16" r="14" fill="url(#logo-gradient)" stroke="white" stroke-width="2"/>
+            <path d="M16 8 L24 20 L8 20 Z" fill="white" opacity="0.9"/>
+          </svg>
+          <span>Sentinel</span>
+        </h1>
+        
+        <!-- Personalization based on user role -->
+        <div class="user-context">
+          <span class="greeting" id="adaptive-greeting">
+            Loading...
+          </span>
+        </div>
+        
+        <!-- Executive Dashboard Link -->
+        <a href="/executive-dashboard.html" class="dashboard-link" title="Executive Dashboard">
+          📊 Dashboard
+        </a>
+        
+        <!-- Theme Toggle -->
+        <button class="theme-toggle" onclick="toggleTheme()" 
+                aria-label="Toggle dark mode">
+          <svg class="icon-sun" width="20" height="20" viewBox="0 0 20 20">
+            <path d="M10 2a8 8 0 100 16 8 8 0 000-16zM10 4a6 6 0 110 12 6 6 0 010-12z" fill="currentColor"/>
+          </svg>
+          <svg class="icon-moon" width="20" height="20" viewBox="0 0 20 20" style="display: none;">
+            <path d="M10 2a8 8 0 108 8c0-4.42-3.58-8-8-8z" fill="currentColor"/>
+          </svg>
+        </button>
+      </div>
+    </header>
+    
+    <!-- Two-Door Selection -->
+    <main class="gateway-main">
+      <div class="door-container">
+        <!-- DevOps Door -->
+        <article class="door-card" data-door="devops" onclick="enterDoor('devops')">
+          <div class="door-accent devops-accent"></div>
+          <div class="door-content">
+            <h2 class="door-title">DevOps Mode</h2>
+            <p class="door-description">
+              CI/CD integration, real-time compliance monitoring, 
+              and automated remediation
+            </p>
+            
+            <!-- Contextual Status -->
+            <div class="door-status" id="devops-status">
+              <div class="status-item">
+                <span class="status-icon">⚡</span>
+                <span class="status-text">Pipeline Running</span>
+              </div>
+              <div class="status-item">
+                <span class="status-icon">🔒</span>
+                <span class="status-text">3 Security Checks</span>
+              </div>
+            </div>
+            
+            <div class="door-cta">
+              <span class="cta-text">Enter DevOps Mode</span>
+              <svg class="cta-arrow" width="20" height="20" viewBox="0 0 20 20">
+                <path d="M7 3l7 7-7 7" stroke="currentColor" stroke-width="2" fill="none"/>
+              </svg>
+            </div>
+          </div>
+        </article>
+        
+        <!-- Compliance Door -->
+        <article class="door-card" data-door="compliance" onclick="enterDoor('compliance')">
+          <div class="door-accent compliance-accent"></div>
+          <div class="door-content">
+            <h2 class="door-title">Compliance Mode</h2>
+            <p class="door-description">
+              Audit preparation, stakeholder management, 
+              and framework harmonization
+            </p>
+            
+            <!-- Contextual Status -->
+            <div class="door-status" id="compliance-status">
+              <div class="status-item">
+                <span class="status-icon">📊</span>
+                <span class="status-text">94% Ready</span>
+              </div>
+              <div class="status-item">
+                <span class="status-icon">🗓️</span>
+                <span class="status-text">Audit in 5 days</span>
+              </div>
+            </div>
+            
+            <div class="door-cta">
+              <span class="cta-text">Enter Compliance Mode</span>
+              <svg class="cta-arrow" width="20" height="20" viewBox="0 0 20 20">
+                <path d="M7 3l7 7-7 7" stroke="currentColor" stroke-width="2" fill="none"/>
+              </svg>
+            </div>
+          </div>
+        </article>
+      </div>
+      
+      <!-- Quick Stats -->
+      <aside class="gateway-stats">
+        <h3 class="stats-title">Platform Intelligence</h3>
+        <dl class="stats-list">
+          <div class="stat-item">
+            <dt>Compliance Score</dt>
+            <dd id="compliance-score">94%</dd>
+          </div>
+          <div class="stat-item">
+            <dt>Deployments Today</dt>
+            <dd id="deployments-today">47</dd>
+          </div>
+          <div class="stat-item">
+            <dt>Controls Passing</dt>
+            <dd id="controls-passing">1,247/1,350</dd>
+          </div>
+          <div class="stat-item">
+            <dt>Next Audit</dt>
+            <dd id="next-audit">5 days</dd>
+          </div>
+        </dl>
+      </aside>
+    </main>
+  </div>
+  
+  <!-- Loading Overlay -->
+  <div id="loading-overlay" class="loading-overlay" style="display: none;">
+    <div class="loading-content">
+      <div class="loading-spinner"></div>
+      <p class="loading-text">Loading Sentinel Intelligence...</p>
+    </div>
+  </div>
+  
+  <!-- JavaScript for Adaptive Behavior -->
+  <script src="js/sentinel-gateway.js"></script>
+  <script>
+    // Initialize the gateway
+    document.addEventListener('DOMContentLoaded', function() {
+      initializeGateway();
+      loadPlatformStats();
+    });
+  </script>
+</body>
+</html>
