@@ -37,7 +37,7 @@ jobs:
           human-review-threshold: 'high'
       
       - name: Upload SARIF Results
-        uses: github/codeql-action/upload-sarif@v2
+        uses: github/codeql-action/upload-sarif@v3
         if: always() && steps.compliance.outputs.violations-found > 0
         with:
           sarif_file: cerberus-reports/compliance-results.sarif
